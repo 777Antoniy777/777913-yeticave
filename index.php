@@ -28,10 +28,10 @@ $user_name = 'Антон'; // укажите здесь ваше имя
 
         <nav class="user-menu">
         <!-- здесь должен быть PHP код для показа имени пользователя -->
-        <?php if ($is_auth === 1): ?>
+        <?php if ($is_auth): ?>
 
         <div class="user-menu__logged">
-            <p><?=$user_name; ?></p>
+            <p><?= $user_name; ?></p>
         </div>
 
         <?php else: ?>
