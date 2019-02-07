@@ -1,5 +1,7 @@
 <?php
 $is_auth = rand(0, 1);
+$user_name = 'Антон'; // укажите здесь ваше имя
+
 // массив для категорий
 $categories = [
     "Доски и лыжи",
@@ -10,47 +12,62 @@ $categories = [
     "Разное"
 ];
 
-// двумерный массив
+// двумерный массив для товаров
 $goods = [
     [
         "designation" => "2014 Rossignol District Snowboard",
-        "category" => "Доски и лыжи",
-        "price" => "10999",
+        "category" => $categories[0],
+        "price" => 10999,
         "url" => "img/lot-1.jpg"
     ],
     [
         "designation" => "DC Ply Mens 2016/2017 Snowboard",
-        "category" => "Доски и лыжи",
-        "price" => "159999",
+        "category" => $categories[0],
+        "price" => 159999,
         "url" => "img/lot-2.jpg"
     ],
     [
         "designation" => "Крепления Union Contact Pro 2015 года размер L/XL",
-        "category" => "Крепления",
-        "price" => "8000",
+        "category" => $categories[1],
+        "price" => 8000,
         "url" => "img/lot-3.jpg"
     ],
     [
         "designation" => "Ботинки для сноуборда DC Mutiny Charocal",
-        "category" => "Ботинки",
-        "price" => "10999",
+        "category" => $categories[2],
+        "price" => 10999,
         "url" => "img/lot-4.jpg"
     ],
     [
         "designation" => "Куртка для сноуборда DC Mutiny Charocal",
-        "category" => "Одежда",
+        "category" => $categories[3],
         "price" => "7500",
         "url" => "img/lot-5.jpg"
     ],
     [
         "designation" => "Маска Oakley Canopy",
-        "category" => "Разное",
-        "price" => "5400",
+        "category" => $categories[5],
+        "price" => 5400,
         "url" => "img/lot-6.jpg"
     ]
 ];
 
-$user_name = 'Антон'; // укажите здесь ваше имя
+// функция для вывода цены
+function set_price (...$goods) {
+   foreach ($goods as $good) {
+        ceil($good["price"]); // округляем значение до целого
+
+        if ($good["price"] >= 1000) {
+            $result = number_format($good["price"], 0, ".", " "); // ф-ция форматирует число по заданным арг.
+        } else {
+            $result = $good["price"];
+        }
+   }
+   return $result;
+   
+};
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -106,7 +123,7 @@ $user_name = 'Антон'; // укажите здесь ваше имя
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $key => $category): ?>
+            <?php foreach ($categories as $category): ?>
 
             <li class="promo__item promo__item--boards">
                 <a class="promo__link" href="/?page=<?= $category; ?>"><?= $category; ?></a>
@@ -133,7 +150,7 @@ $user_name = 'Антон'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?= $good["price"] ?></span>
-                            <span class="lot__cost"><?= $good["price"] ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?php set_price($goods); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
@@ -152,7 +169,7 @@ $user_name = 'Антон'; // укажите здесь ваше имя
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $key => $category): ?>
+            <?php foreach ($categories as $category): ?>
 
             <li class="nav__item">
                 <a href="/?page=<?= $category; ?>"><?= $category; ?></a>
