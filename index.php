@@ -4,71 +4,61 @@ $user_name = 'Антон'; // укажите здесь ваше имя
 
 // массив для категорий
 $categories = [
-    "Доски и лыжи",
-    "Крепления",
-    "Ботинки",
-    "Одежда",
-    "Инструменты",
-    "Разное"
+    "boards" => "Доски и лыжи",
+    "attachment" => "Крепления",
+    "boots" => "Ботинки",
+    "clothing" => "Одежда",
+    "tools" => "Инструменты",
+    "other" => "Разное"
 ];
 
 // двумерный массив для товаров
 $goods = [
     [
         "designation" => "2014 Rossignol District Snowboard",
-        "category" => $categories[0],
+        "category" => $categories["boards"],
         "price" => 10999,
         "url" => "img/lot-1.jpg"
-    ],
-    [
+    ], [
         "designation" => "DC Ply Mens 2016/2017 Snowboard",
-        "category" => $categories[0],
+        "category" => $categories["boards"],
         "price" => 159999,
         "url" => "img/lot-2.jpg"
-    ],
-    [
+    ], [
         "designation" => "Крепления Union Contact Pro 2015 года размер L/XL",
-        "category" => $categories[1],
+        "category" => $categories["attachment"],
         "price" => 8000,
         "url" => "img/lot-3.jpg"
-    ],
-    [
+    ], [
         "designation" => "Ботинки для сноуборда DC Mutiny Charocal",
-        "category" => $categories[2],
+        "category" => $categories["boots"],
         "price" => 10999,
         "url" => "img/lot-4.jpg"
-    ],
-    [
+    ], [
         "designation" => "Куртка для сноуборда DC Mutiny Charocal",
-        "category" => $categories[3],
-        "price" => "7500",
+        "category" => $categories["clothing"],
+        "price" => 7500,
         "url" => "img/lot-5.jpg"
-    ],
-    [
+    ], [
         "designation" => "Маска Oakley Canopy",
-        "category" => $categories[5],
+        "category" => $categories["other"],
         "price" => 5400,
         "url" => "img/lot-6.jpg"
     ]
 ];
 
-// функция для вывода цены
-function set_price (...$goods) {
-   foreach ($goods as $good) {
-        ceil($good["price"]); // округляем значение до целого
+/**
+ *  функция для форматирования цены
+ *  @param {integer} $price - изначальная цена
+ *  @return {string} - отформатированная цена
+ */
+function format_price ($price) {
+    ceil($price); // округляем значение до целого
 
-        if ($good["price"] >= 1000) {
-            $result = number_format($good["price"], 0, ".", " "); // ф-ция форматирует число по заданным арг.
-        } else {
-            $result = $good["price"];
-        }
-   }
-   return $result;
-   
+    return number_format($price, 0, ".", " ") . "&#x20bd;"; // ф-ция форматирует число по заданным арг.
 };
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -96,20 +86,20 @@ function set_price (...$goods) {
         <!-- здесь должен быть PHP код для показа имени пользователя -->
         <?php if ($is_auth): ?>
 
-        <div class="user-menu__logged">
-            <p><?= $user_name; ?></p>
-        </div>
+            <div class="user-menu__logged">
+                <p><?= $user_name; ?></p>
+            </div>
 
         <?php else: ?>
 
-        <ul class="user-menu__list">
-            <li class="user-menu__item">
-                <a href="#">Регистрация</a>
-            </li>
-            <li class="user-menu__item">
-                <a href="#">Вход</a>
-            </li>
-        </ul>
+            <ul class="user-menu__list">
+                <li class="user-menu__item">
+                    <a href="#">Регистрация</a>
+                </li>
+                <li class="user-menu__item">
+                    <a href="#">Вход</a>
+                </li>
+            </ul>
 
         <?php endif; ?>
         
@@ -123,11 +113,11 @@ function set_price (...$goods) {
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $category): ?>
+            <?php foreach ($categories as $alias => $category): ?>
 
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="/?page=<?= $category; ?>"><?= $category; ?></a>
-            </li>
+                <li class="promo__item promo__item--<?= $alias; ?>">
+                    <a class="promo__link" href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
+                </li>
 
             <?php endforeach; ?>
         </ul>
@@ -138,26 +128,26 @@ function set_price (...$goods) {
         </div>
         <ul class="lots__list">
             <!--заполните этот список из массива с товарами-->
-            <?php foreach ($goods as $key => $good): ?>
+            <?php foreach ($goods as $id => $good): ?>
 
-            <li class="lots__item lot">
-                <div class="lot__image">
-                    <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= $good["designation"]; ?>">
-                </div>
-                <div class="lot__info">
-                    <span class="lot__category"><?= $good["category"]; ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/?=<?= $good["designation"]; ?>.html"><?= $good["designation"]; ?></a></h3>
-                    <div class="lot__state">
-                        <div class="lot__rate">
-                            <span class="lot__amount"><?= $good["price"] ?></span>
-                            <span class="lot__cost"><?php set_price($goods); ?></span>
-                        </div>
-                        <div class="lot__timer timer">
-                            12:23
+                <li class="lots__item lot">
+                    <div class="lot__image">
+                        <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= $good["designation"]; ?>">
+                    </div>
+                    <div class="lot__info">
+                        <span class="lot__category"><?= $good["category"]; ?></span>
+                        <h3 class="lot__title"><a class="text-link" href="index.php?good=<?= $id; ?>"><?= $good["designation"]; ?></a></h3>
+                        <div class="lot__state">
+                            <div class="lot__rate">
+                                <span class="lot__amount">1</span>
+                                <span class="lot__cost"><?= format_price($good["price"]); ?></span>
+                            </div>
+                            <div class="lot__timer timer">
+                                12:23
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
+                </li>
 
             <?php endforeach; ?>
         </ul>
@@ -169,10 +159,10 @@ function set_price (...$goods) {
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $category): ?>
+            <?php foreach ($categories as $alias => $category): ?>
 
             <li class="nav__item">
-                <a href="/?page=<?= $category; ?>"><?= $category; ?></a>
+                <a href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
             </li>
 
             <?php endforeach; ?>
