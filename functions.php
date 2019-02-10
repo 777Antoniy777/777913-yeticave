@@ -33,3 +33,22 @@ function format_price ($price) {
 
     return number_format($price, 0, ".", " ") . "&#x20bd;"; // ф-ция форматирует число по заданным арг.
 };
+
+// Таймзона моего города и местная локаль
+date_default_timezone_set("Asia/Omsk");
+setlocale(LC_ALL, "ru_RU");
+
+/**
+ *  функция для установки времени
+ *  @return {string} - установленное время
+ */
+function set_time () {
+    $time_now = strtotime("now"); // время сейчас
+    $time_midnight = strtotime("tomorrow midnight"); // время начала следующего дня (полночь)
+    $time_interval = $time_midnight - $time_now;
+
+    $hours = floor($time_interval / 3600);
+    $minutes = floor(($time_interval % 3600) / 60); 
+
+    return $hours . ":" . $minutes; // вывод оставшегося времени до начала следующего дня (полночь)
+};
