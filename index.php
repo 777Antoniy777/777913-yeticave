@@ -1,6 +1,7 @@
 <?php 
 require("data.php");
 require("functions.php");
+require("config.php");
 
 // index контент
 $index_content = include_template("index.php", [
