@@ -34,12 +34,8 @@ function format_price ($price) {
     return number_format($price, 0, ".", " ") . "&#x20bd;"; // ф-ция форматирует число по заданным арг.
 };
 
-// Таймзона моего города и местная локаль
-date_default_timezone_set("Asia/Omsk");
-setlocale(LC_ALL, "ru_RU");
-
 /**
- *  функция для установки времени
+ *  функция для показа оставшегося времени до начала следующего дня (полночь)
  *  @return {string} - установленное время
  */
 function set_time () {
