@@ -31,13 +31,13 @@
                         <h3 class="lot__title"><a class="text-link" href="index.php?good=<?= $id; ?>"><?= htmlspecialchars($good["designation"]); ?></a></h3>
                         <div class="lot__state">
                             <div class="lot__rate">
+                                <span class="lot__amount">1</span>
                                 <!--htmlspecialchars() - защита от XSS атак-->
-                                <span class="lot__amount"><?= htmlspecialchars(1); ?></span>
                                 <span class="lot__cost"><?= format_price(htmlspecialchars($good["price"])); ?></span>
                             </div>
                             <div class="lot__timer timer">
                                 <!--вывод времени-->
-                                <?= set_time(); ?>
+                                <?= get_time(); ?>
                             </div>
                         </div>
                     </div>
