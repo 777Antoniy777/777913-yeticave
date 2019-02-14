@@ -1,5 +1,5 @@
 -- удаление БД, если она уже была ранее создана
-DROP DATABASE [IF EXISTS] yeticave;
+DROP DATABASE IF EXISTS yeticave;
 -- создание БД
 CREATE DATABASE yeticave;
 
@@ -9,8 +9,6 @@ CREATE TABLE category (
   name CHAR(100) UNIQUE NOT NULL,
   alias CHAR(50) NOT NULL
 );
-
-INSERT INTO categories (name) VALUES ("Доски и лыжи"), ("Крепления"), ("Ботинки"), ("Одежда"), ("Инструменты"), ("Разное");
 
 -- создание таблицы Лоты
 CREATE TABLE lots (
@@ -25,11 +23,6 @@ CREATE TABLE lots (
   start_price INT NOT NULL,
   step INT NOT NULL
 );
-
-INSERT INTO lots (category_id, name, description, date, url, price, step)
-VALUES
-  (1, "2014 Rossignol District Snowboard", "2014 Rossignol District Snowboard", "...", "...", 10999, 1000),
-  (2, "2014 Rossignol District Snowboard", "2014 Rossignol District Snowboard", "...", "...", 10999, 1000);
 
 -- создание таблицы Пользователи
 CREATE TABLE users (
