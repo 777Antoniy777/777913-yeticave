@@ -19,9 +19,10 @@ CREATE TABLE lots (
   user_id INT,
   name CHAR(150) NOT NULL,
   description CHAR(255),
-  date_finish TIMESTAMP,
+  date_create TIMESTAMP,
+  date_end TIMESTAMP,
   url CHAR(50) NOT NULL,
-  price INT NOT NULL,
+  start_price INT NOT NULL,
   step INT NOT NULL
 );
 
@@ -37,14 +38,14 @@ CREATE TABLE users (
   email CHAR(50) NOT NULL UNIQUE,
   password CHAR(50) NOT NULL,
   avatar CHAR(20),
-  date DATETIME NOT NULL,
-  contacts CHAR(50)
+  date_registry DATETIME,
+  contacts CHAR(70)
 );
 
 -- создание таблицы Ставки
 CREATE TABLE bets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   lot_id INT,
-  date TIMESTAMP NOT NULL,
+  date_start TIMESTAMP,
   price INT NOT NULL
 );
