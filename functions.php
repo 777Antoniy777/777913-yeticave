@@ -1,5 +1,4 @@
 <?php
-
 /**
  *  функция шаблонизатор
  *  @param {string} $name - имя шаблона,
@@ -8,19 +7,16 @@
  */
 function include_template ($name, $data) {
     $name = 'templates/' . $name;
-    $result = '';
 
     if (!is_readable($name)) {
-        return $result;
+        return null;
     }
 
     ob_start();
     extract($data);
     require $name;
 
-    $result = ob_get_clean();
-
-    return $result;
+    return ob_get_clean();
 };
 
 /**
@@ -38,13 +34,13 @@ function format_price ($price) {
  *  функция для показа оставшегося времени до начала следующего дня (полночь)
  *  @return {string} - установленное время
  */
-function set_time () {
+function get_time () {
     $time_now = strtotime("now"); // время сейчас
     $time_midnight = strtotime("tomorrow midnight"); // время начала следующего дня (полночь)
     $time_interval = $time_midnight - $time_now;
 
     $hours = floor($time_interval / 3600);
-    $minutes = floor(($time_interval % 3600) / 60); 
+    $minutes = floor(($time_interval % 3600) / 60);
 
     return $hours . ":" . $minutes; // вывод оставшегося времени до начала следующего дня (полночь)
 };
