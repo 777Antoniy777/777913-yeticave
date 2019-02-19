@@ -41,7 +41,7 @@
             </ul>
 
         <?php endif; ?>
-        
+
         </nav>
     </div>
 </header>
@@ -56,9 +56,9 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $alias => $category): ?>
 
-            <li class="nav__item">
-                <a href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
-            </li>
+                <li class="nav__item">
+                    <a href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
+                </li>
 
             <?php endforeach; ?>
         </ul>
