@@ -6,7 +6,7 @@ CREATE DATABASE yeticave CHARACTER SET utf8 COLLATE utf8_general_ci;
 -- создание таблицы Категории
 CREATE TABLE category (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name CHAR(100) UNIQUE NOT NULL,
+  title CHAR(100) UNIQUE NOT NULL,
   alias CHAR(50) NOT NULL
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE lots (
   id INT AUTO_INCREMENT PRIMARY KEY,
   category_id SMALLINT,
   user_id INT,
-  name CHAR(150) NOT NULL,
+  title CHAR(150) NOT NULL,
   description TEXT,
   date_create TIMESTAMP DEFAULT NOW(),
   date_end TIMESTAMP,
@@ -45,7 +45,7 @@ CREATE TABLE bets (
 );
 
 -- наполнение таблицы Категории
-INSERT INTO categories (name, alias)
+INSERT INTO categories (title, alias)
 VALUES
   ("Доски и лыжи", "boards"),
   ("Крепления", "attachment"),
@@ -55,7 +55,7 @@ VALUES
   ("Разное", "other");
 
 -- наполнение таблицы Лоты
-INSERT INTO lots (category_id, name, description, date_end, url, price, step, user_id)
+INSERT INTO lots (category_id, title, description, date_end, url, price, step, user_id)
 VALUES
   (
     1,
