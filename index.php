@@ -13,6 +13,18 @@ if (!$link) {
     $error_content = include_template("error.php", [
         "error" => $error
     ]);
+
+    $layout_content = include_template("layout.php", [
+        "content" => $error_content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth,
+        "user_name" => $user_name
+    ]);
+
+    // вывод страницы index.php при отсутствии данных
+    print($layout_content);
+    exit;
 } else {
     // запрос на получение массива категорий
     $sql = "SELECT title_category, alias FROM categories";
@@ -28,7 +40,18 @@ if (!$link) {
         $error_content = include_template("error.php", [
             "error" => $error
         ]);
-        // print($error_content);
+
+        $layout_content = include_template("layout.php", [
+            "content" => $error_content,
+            "page_name" => "YetiCave",
+            "categories" => $categories,
+            "is_auth" => $is_auth,
+            "user_name" => $user_name
+        ]);
+
+        // вывод страницы index.php при отсутствии данных
+        print($layout_content);
+        exit;
     }
 
     // fetch_data($link, $sql, $categories);
@@ -49,7 +72,18 @@ if (!$link) {
         $error_content = include_template("error.php", [
             "error" => $error
         ]);
-        // print($error_content);
+
+        $layout_content = include_template("layout.php", [
+            "content" => $error_content,
+            "page_name" => "YetiCave",
+            "categories" => $categories,
+            "is_auth" => $is_auth,
+            "user_name" => $user_name
+        ]);
+
+        // вывод страницы index.php при отсутствии данных
+        print($layout_content);
+        exit;
     }
 
     // Защита от SQL-инъекций
@@ -71,7 +105,22 @@ if (!$link) {
         if ($goods = mysqli_stmt_get_result($get_stmt)) {
             $goods = mysqli_fetch_all($goods, MYSQLI_ASSOC);
             // передаем в шаблон результат выполнения
-            $content = include_template("search.php", ["goods" => $goods]);
+            $search_content = include_template("search.php", [
+                "goods" => $goods,
+                "search" => $search
+            ]);
+            //////////////////////////////////////
+            $layout_content = include_template("layout.php", [
+                "content" => $search_content,
+                "page_name" => "YetiCave",
+                "categories" => $categories,
+                "is_auth" => $is_auth,
+                "user_name" => $user_name
+            ]);
+
+            print($layout_content);
+            exit;
+
         } else {
             $error = mysqli_error($connect);
             $content = include_template("error.php", [

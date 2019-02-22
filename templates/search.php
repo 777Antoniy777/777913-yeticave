@@ -2,10 +2,10 @@
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $alias => $category): ?>
+            <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $alias; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
+                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
+                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
                 </li>
 
             <?php endforeach; ?>
@@ -13,7 +13,7 @@
         </nav>
         <div class="container">
         <section class="lots">
-            <h2>Результаты поиска по запросу «<span>Union</span>»</h2>
+            <h2>Результаты поиска по запросу «<span><?= $search; ?></span>»</h2>
             <ul class="lots__list">
                 <!--заполните этот список из массива с товарами-->
                 <?php foreach ($goods as $id => $good): ?>
@@ -41,7 +41,7 @@
                     </li>
 
                 <?php endforeach; ?>
-                
+
             </ul>
         </section>
         <ul class="pagination-list">
