@@ -4,10 +4,10 @@
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $alias => $category): ?>
+            <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $alias; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
+                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
+                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
                 </li>
 
             <?php endforeach; ?>
@@ -23,17 +23,17 @@
 
                 <li class="lots__item lot">
                     <div class="lot__image">
-                        <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= $good["designation"]; ?>">
+                        <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= $good["title_lot"]; ?>">
                     </div>
                     <div class="lot__info">
-                        <span class="lot__category"><?= $good["category"]; ?></span>
+                        <span class="lot__category"><?= $good["title_category"]; ?></span>
                         <!--htmlspecialchars() - защита от XSS атак-->
-                        <h3 class="lot__title"><a class="text-link" href="index.php?good=<?= $id; ?>"><?= htmlspecialchars($good["designation"]); ?></a></h3>
+                        <h3 class="lot__title"><a class="text-link" href="index.php?good=<?= $id; ?>"><?= htmlspecialchars($good["title_lot"]); ?></a></h3>
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">1</span>
                                 <!--htmlspecialchars() - защита от XSS атак-->
-                                <span class="lot__cost"><?= format_price(htmlspecialchars($good["price"])); ?></span>
+                                <span class="lot__cost"><?= format_price(htmlspecialchars($good["start_price"])); ?></span>
                             </div>
                             <div class="lot__timer timer">
                                 <!--вывод времени-->

@@ -1,73 +1,71 @@
 <?php
-require("data.php");
+// require("data.php");
 require_once("functions.php");
-require("config.php");
+require_once("config.php");
 
 // работа с MySQL из php
 require_once("init.php");
 
 // проверка на подключение к БД и получение массива категорий
-if (!$connect) {
+if (!$link) {
     // неуспешное выполнение запроса, показ ошибки
     $error = mysqli_connect_error();
     $error_content = include_template("error.php", [
-        "categories" => $categories,
         "error" => $error
     ]);
 } else {
     // запрос на получение массива категорий
-    $get_categories = "SELECT name, alias FROM categories";
-    $result_categories = mysqli_query($connect, $get_categories);
+    $sql = "SELECT title_category, alias FROM categories";
+    $result = mysqli_query($link, $sql);
 
-    if ($result_categories) {
+    if ($result) {
         // успешное выполнение запроса
-        $categories = mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        // var_dump($categories);
     } else {
         // неуспешное выполнение запроса, показ ошибки
-        $error = mysqli_error($connect);
+        $error = mysqli_error($link);
         $error_content = include_template("error.php", [
-            "categories" => $categories,
             "error" => $error
         ]);
+        // print($error_content);
     }
 
+    // fetch_data($link, $sql, $categories);
+
     // запрос на получение массива товаров
-    $get_goods = "SELECT l.name, c.name, l.start_price, l.url FROM categories c
+    $sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url FROM categories c
                   JOIN lots l ON l.category_id = c.id LIMIT 9";
-    $result_goods = mysqli_query($connect, $get_goods);
+    // fetch_data($link, $sql);
+    $result = mysqli_query($link, $sql);
 
-    if ($result_goods) {
+    if ($result) {
         // успешное выполнение запроса
-        $goods = mysqli_fetch_all($result_goods, MYSQLI_ASSOC);
-
-        // index контент
-        $index_content = include_template("index.php", [
-            "goods" => $goods,
-            "categories" => $categories
-        ]);
+        $goods = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        // var_dump($goods);
     } else {
         // неуспешное выполнение запроса, показ ошибки
-        $error = mysqli_error($connect);
+        $error = mysqli_error($link);
         $error_content = include_template("error.php", [
-            "categories" => $categories,
             "error" => $error
         ]);
+        // print($error_content);
     }
 
     // Защита от SQL-инъекций
-    $search = trim($_GET["q"]) ?? "";
+    $search = trim($_GET["search"]) ?? "";
 
-    if (!strlen($search)) {
-        include_template("search.php", [$goods => []]);
+    if (!$search) {
+        include_template("search.php", ["goods" => []]);
     } else {
         $search = "%" . $search . "%";
 
         // запрос на поиск гифок по имени или описанию
-		$get_search = "SELECT l.name, c.name, l.start_price, l.url FROM categories c
+		$sql = "SELECT l.name, l.title_lot, l.start_price, l.url FROM categories c
                        JOIN lots l ON l.category_id = c.id
-                       WHERE `title` LIKE ? OR `description` LIKE ?";
+                       WHERE `title_lot` LIKE ? OR `description` LIKE ?";
 
-        $get_stmt = db_get_prepare_stmt($connect, $get_search, $search);
+        $get_stmt = db_get_prepare_stmt($link, $sql, $search, $search);
         mysqli_stmt_execute($get_stmt);
 
         if ($goods = mysqli_stmt_get_result($get_stmt)) {
@@ -77,26 +75,36 @@ if (!$connect) {
         } else {
             $error = mysqli_error($connect);
             $content = include_template("error.php", [
-                "categories" => $categories,
                 "error" => $error
             ]);
         }
     }
 }
 
-// // массив товаров
-// $get_goods = "SELECT l.name, c.name, l.start_price, l.url FROM categories c
-//               JOIN lots l ON l.category_id = c.id";
-// mysqli_query($connect, $get_goods);
-
-//
 // index контент
-// $index_content = include_template("index.php", [
-//     "goods" => $goods,
-//     "categories" => $categories
-// ]);
+$index_content = include_template("index.php", [
+    "goods" => $goods,
+    "categories" => $categories
+]);
 
 // layout контент
+// if (!$link) {
+//     $layout_content = include_template("layout.php", [
+//         "content" => $error_content,
+//         "page_name" => "YetiCave",
+//         "is_auth" => $is_auth,
+//         "user_name" => $user_name
+//     ]);
+// } else {
+//     $layout_content = include_template("layout.php", [
+//         "content" => $index_content,
+//         "page_name" => "YetiCave",
+//         "categories" => $categories,
+//         "is_auth" => $is_auth,
+//         "user_name" => $user_name
+//     ]);
+// }
+
 $layout_content = include_template("layout.php", [
     "content" => $index_content,
     "page_name" => "YetiCave",
