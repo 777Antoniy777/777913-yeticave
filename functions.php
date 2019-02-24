@@ -54,7 +54,7 @@ function get_time () {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt ($link, $sql, $data = []) {
     $stmt = mysqli_prepare($link, $sql);
 
     if ($data) {
@@ -87,4 +87,20 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     }
 
     return $stmt;
-}
+};
+
+function fetch_data ($con, $query, $data) {
+    $result = mysqli_query($con, $query);
+
+    if ($result) {
+        // успешное выполнение запроса
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    } else {
+        // неуспешное выполнение запроса, показ ошибки
+        $error = mysqli_error($con);
+        $error_content = include_template("error.php", [
+            "error" => $error
+        ]);
+        // print($error_content);
+    }
+};

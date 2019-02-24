@@ -2,11 +2,12 @@
 DROP DATABASE IF EXISTS yeticave;
 -- создание БД и установка кодировки utf-8
 CREATE DATABASE yeticave CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE yeticave;
 
 -- создание таблицы Категории
-CREATE TABLE category (
+CREATE TABLE categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  title CHAR(100) UNIQUE NOT NULL,
+  title_category CHAR(100) UNIQUE NOT NULL,
   alias CHAR(50) NOT NULL
 );
 
@@ -15,7 +16,7 @@ CREATE TABLE lots (
   id INT AUTO_INCREMENT PRIMARY KEY,
   category_id SMALLINT,
   user_id INT,
-  title CHAR(150) NOT NULL,
+  title_lot CHAR(150) NOT NULL,
   description TEXT,
   date_create TIMESTAMP DEFAULT NOW(),
   date_end TIMESTAMP,
@@ -45,7 +46,7 @@ CREATE TABLE bets (
 );
 
 -- наполнение таблицы Категории
-INSERT INTO categories (title, alias)
+INSERT INTO categories (title_category, alias)
 VALUES
   ("Доски и лыжи", "boards"),
   ("Крепления", "attachment"),
@@ -55,7 +56,7 @@ VALUES
   ("Разное", "other");
 
 -- наполнение таблицы Лоты
-INSERT INTO lots (category_id, title, description, date_end, url, price, step, user_id)
+INSERT INTO lots (category_id, title_lot, description, date_end, url, start_price, step, user_id)
 VALUES
   (
     1,
@@ -116,8 +117,8 @@ VALUES
 -- наполнение таблицы Пользователи
 INSERT INTO users (name, email, password, avatar, date_registry, contacts)
 VALUES
-("Антон", "tat7106@gmail.com", "Tony777", "img/avatar-1.jpg", "07.01.1996", "+89136826707"),
-("Андрей", "andrey@gmail.com", "GodOverGod", "img/avatar-2.jpg", "09.10.1990", "+88003553535");
+("Антон", "tat7106@gmail.com", "Tony777", "img/avatar-1.jpg", "1996-01-07", "+89136826707"),
+("Андрей", "andrey@gmail.com", "GodOverGod", "img/avatar-2.jpg", "1990-10-09", "+88003553535");
 
 -- наполнение таблицы Ставки
 INSERT INTO bets (price, user_id, lot_id)

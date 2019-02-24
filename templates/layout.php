@@ -57,7 +57,7 @@
             <?php foreach ($categories as $alias => $category): ?>
 
                 <li class="nav__item">
-                    <a href="index.php?category=<?= $alias; ?>"><?= $category; ?></a>
+                    <a href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
                 </li>
 
             <?php endforeach; ?>
