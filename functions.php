@@ -136,17 +136,37 @@ function db_fetch_data ($link, $sql, $data = []) {
  *
  * @return {int} - начение поля AUTO_INCREMENT, которое было затронуто предыдущим запросом
  */
-function db_insert_data ($link, $sql, $data = []) {
+function db_insert_data ($link, $sql, $data = [], $direction) {
     $stmt = db_get_prepare_stmt($link, $sql, $data);
 
     if ($result = mysqli_stmt_execute($stmt)) {
-        return mysqli_insert_id($link);
+        $id = mysqli_insert_id($link);
+
+        return header($direction . $id);
+    } else {
+        // неуспешное выполнение запроса, показ ошибки
+        $error = mysqli_error($link);
+        $content = include_template("error.php", [
+            "error" => $error
+        ]);
+
+        $layout_content = include_template("layout.php", [
+            "content" => $content,
+            "page_name" => "YetiCave",
+            "categories" => $categories,
+            "is_auth" => $is_auth,
+            "user_name" => $user_name
+        ]);
+
+        // вывод страницы index.php при отсутствии данных
+        print($layout_content);
+        exit;
     }
 }
 
 /**
  * Проверяет, что переданная дата соответствует формату ДД.ММ.ГГГГ
- * 
+ *
  * @param string $date - строка с датой
  *
  * @return bool

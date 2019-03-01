@@ -11,12 +11,18 @@
             <?php endforeach; ?>
         </ul>
     </nav>
-    <form class="form form--add-lot container form--invalid" action="/add.php?" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form form--add-lot container form--invalid" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
         <h2>Добавление лота</h2>
         <div class="form__container-two">
-            <div class="form__item form__item--invalid"> <!-- form__item--invalid -->
+
+            <?php
+                $classname = isset($errors["lot-name"]) ? "form__item--invalid" : "";
+                $value = $lot["lot-name"] ?? "";
+            ?>
+
+            <div class="form__item <?= $classname; ?>"> <!-- form__item--invalid -->
             <label for="lot-name">Наименование</label>
-            <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" required>
+            <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?= $value; ?>" required>
             <span class="form__error">Введите наименование лота</span>
             </div>
             <div class="form__item">
@@ -26,16 +32,22 @@
 
                 <?php foreach ($categories as $category): ?>
 
-                    <option><?= $category["title_category"]; ?></option>
+                    <option value="<?= $category["alias"]; ?>"> <?= $category['title_category']; ?></option>
 
                 <?php endforeach; ?>
             </select>
             <span class="form__error">Выберите категорию</span>
             </div>
         </div>
-        <div class="form__item form__item--wide">
+
+        <?php
+            $classname = isset($errors["message"]) ? "form__item--invalid" : "";
+            $value = $lot["message"] ?? "";
+        ?>
+
+        <div class="form__item form__item--wide <?= $classname; ?>">
             <label for="message">Описание</label>
-            <textarea id="message" name="message" placeholder="Напишите описание лота" required></textarea>
+            <textarea id="message" name="message" placeholder="Напишите описание лота" required value="<?= $value; ?>"></textarea>
             <span class="form__error">Напишите описание лота</span>
         </div>
         <div class="form__item form__item--file"> <!-- form__item--uploaded -->
@@ -47,7 +59,7 @@
             </div>
             </div>
             <div class="form__input-file">
-            <input class="visually-hidden" type="file" name="file" id="photo2" value="">
+            <input class="visually-hidden" type="file" name="good_img" id="photo2" value="">
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
@@ -70,7 +82,20 @@
             <span class="form__error">Введите дату завершения торгов</span>
             </div>
         </div>
-        <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+
+        <?php if (isset($errors)): ?>
+
+            <div class="form__errors">
+                <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+                <ul>
+                    <?php foreach($errors as $error => $value): ?>
+                    <li><strong><?= $dict[$error]; ?>: </strong><?= $value; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+
+        <?php endif; ?>
+
         <button type="submit" class="button">Добавить лот</button>
     </form>
 </main>

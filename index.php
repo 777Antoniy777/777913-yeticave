@@ -23,7 +23,7 @@ if (!$search) {
     $search = "%" . $search . "%";
 
     // запрос на поиск гифок по имени или описанию
-    $sql = "SELECT l.name, l.title_lot, l.start_price, l.url FROM categories c
+    $sql = "SELECT c.title_category, l.title_lot, l.start_price, l.url FROM categories c
             JOIN lots l ON l.category_id = c.id
             WHERE `title_lot` LIKE ? OR `description` LIKE ?";
 
