@@ -6,7 +6,7 @@ require_once("config.php");
 require_once("init.php");
 
 // запрос на получение массива категорий
-$sql = "SELECT title_category, alias FROM categories";
+$sql = "SELECT id, title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errors = [];
 
     foreach ($required as $key) {
-        if (empty($_POST[$key])) {
+        if (empty($lot[$key])) {
             $errors[$key] = "Заполните это поле";
         }
     }
@@ -59,20 +59,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if (count($errors)) {
-		$content = include_template('add.php', [
+        $content = include_template('add.php', [
             "categories" => $categories,
             "lot" => $lot,
             "errors" => $errors,
             "dict" => $dict
         ]);
-	} else {
-		$content = include_template('lot.php', [
-            'lot' => $lot,
-            "categories" => $categories
-        ]);
-
-        $sql = "INSERT INTO lots (category_id, title_lot, description, date_end, url, start_price, step, date_create, user_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 1)";
+    } else {
+        $sql = "INSERT INTO lots (category_id, title_lot, description, date_end, url, start_price, step, user_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
 
         $data = db_insert_data($link, $sql, [
             $lot["category"],
@@ -86,9 +81,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             "Location: lot.php?id="
         );
-	}
+    }
 } else {
-	$content = include_template('add.php', [
+    $content = include_template('add.php', [
         "categories" => $categories
     ]);
 }

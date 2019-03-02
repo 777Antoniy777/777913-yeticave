@@ -26,13 +26,19 @@
             <span class="form__error">Введите наименование лота</span>
             </div>
             <div class="form__item">
+
+            <?php
+                $classname = isset($errors["lot-name"]) ? "form__item--invalid" : "";
+                $value = $lot["lot-name"] ?? "";
+            ?>
+
             <label for="category">Категория</label>
-            <select id="category" name="category" required>
+            <select class="<?= $classname; ?>" id="category" name="category" required>
                 <option>Выберите категорию</option>
 
                 <?php foreach ($categories as $category): ?>
 
-                    <option value="<?= $category["id"]; ?> <?= ($category["id"] === $lot["category_id"]) ?>"><?= $category["title_category"]; ?></option>
+                    <option value="<?= $category["id"]; ?>"><?= $category["title_category"]; ?></option>
 
                 <?php endforeach; ?>
             </select>
@@ -41,13 +47,13 @@
         </div>
 
         <?php
-            $classname = isset($errors["message"]) ? "" : "form__item--invalid";
+            $classname = isset($errors["message"]) ? "form__item--invalid" : "";
             $value = $lot["message"] ?? "";
         ?>
 
         <div class="form__item form__item--wide <?= $classname; ?>">
             <label for="message">Описание</label>
-            <textarea id="message" name="message" placeholder="Напишите описание лота" required value="<?= $value; ?>"></textarea>
+            <textarea id="message" name="message" placeholder="Напишите описание лота" required><?= $value; ?></textarea>
             <span class="form__error">Напишите описание лота</span>
         </div>
         <div class="form__item form__item--file"> <!-- form__item--uploaded -->
@@ -68,7 +74,7 @@
         <div class="form__container-three">
 
             <?php
-                $classname = isset($errors["lot-rate"]) ? "" : "form__item--invalid";
+                $classname = isset($errors["lot-rate"]) ? "form__item--invalid" : "";
                 $value = $lot["lot-rate"] ?? "";
             ?>
 
@@ -79,7 +85,7 @@
             </div>
 
             <?php
-                $classname = isset($errors["lot-step"]) ? "" : "form__item--invalid";
+                $classname = isset($errors["lot-step"]) ? "form__item--invalid" : "";
                 $value = $lot["lot-step"] ?? "";
             ?>
 
@@ -90,7 +96,7 @@
             </div>
 
             <?php
-                $classname = isset($errors["lot-date"]) ? "" : "form__item--invalid";
+                $classname = isset($errors["lot-date"]) ? "form__item--invalid" : "";
                 $value = $lot["lot-date"] ?? "";
             ?>
 
