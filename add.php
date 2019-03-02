@@ -13,7 +13,7 @@ $categories = db_fetch_data($link, $sql);
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $lot = $_POST;
 
-    $required = ["lot-name", "category", "message", "good_img", "lot-rate", "lot-step", "lot-date"];
+    $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
     $dict = [
         "lot-name" => "Наименование",
         "category" => "Категория",
@@ -32,24 +32,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // проверяем существует ли файл изображения товара и если есть, то перемещаем его из временной папки
-    if (isset($_FILES["good_img"]["name"])) {
+    if (!empty($_FILES["good_img"]["name"])) {
         $tmp_name = $_FILES["good_img"]["tmp_name"];
-        $filepath = __DIR__ . "img/";
+        $filepath = __DIR__ . "/img/";
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);       //открываем соединение file_info
         $file_type = finfo_file($finfo, $tmp_name);    //получаем тип файла
 
-        if ($file_type !== "image/jpg" || $file_type !== "image/png") {
-            $errors["good_img"] = "Загрузите картинку в формате JPG или PNG";
-        } else {
-            if ($file_type === "image/jpg") {
-                $filename = uniqid() . ".jpg";
-            } else if ($file_type === "image/png") {
+        if ($file_type == "image/png" || $file_type == "image/jpeg") {
+
+            if ($file_type === "image/jpeg") {
+                $filename = uniqid() . ".jpeg";
+            }
+
+            if ($file_type === "image/png") {
                 $filename = uniqid() . ".png";
             }
 
             move_uploaded_file($tmp_name, $filepath . $filename);
             $lot["good_img"] = $filename;
+        } else {
+            $errors["good_img"] = "Загрузите картинку в формате JPG или PNG";
         }
     } else {
         $errors["good_img"] = "Вы не загрузили файл";

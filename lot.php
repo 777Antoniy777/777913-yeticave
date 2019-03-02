@@ -9,7 +9,7 @@ require_once("init.php");
 $sql = "SELECT title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
-if (empty($_GET["id"])) {
+if (isset($_GET["id"])) {
     $id = $_GET["id"];
 
     // запрос на получение массива товаров
