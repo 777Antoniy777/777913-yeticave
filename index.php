@@ -10,7 +10,7 @@ $sql = "SELECT title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
 // запрос на получение массива товаров
-$sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url FROM categories c
+$sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url, l.date_end FROM categories c
         JOIN lots l ON l.category_id = c.id LIMIT 9";
 $goods = db_fetch_data($link, $sql);
 

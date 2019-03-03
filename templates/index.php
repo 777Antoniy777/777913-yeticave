@@ -37,7 +37,7 @@
                             </div>
                             <div class="lot__timer timer">
                                 <!--вывод времени-->
-                                <?= get_time(); ?>
+                                <?= get_time($good["date_end"]); ?>
                             </div>
                         </div>
                     </div>

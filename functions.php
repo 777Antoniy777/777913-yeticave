@@ -32,17 +32,21 @@ function format_price ($price) {
 
 /**
  *  функция для показа оставшегося времени до начала следующего дня (полночь)
+ *
+ *  @param $date_end - дата окончания выставления лота
+ *
  *  @return {string} - установленное время
  */
-function get_time () {
-    $time_now = strtotime("now"); // время сейчас
-    $time_midnight = strtotime("tomorrow midnight"); // время начала следующего дня (полночь)
-    $time_interval = $time_midnight - $time_now;
+function get_time ($date_end) {
+    $time_now = strtotime("now");       // время сейчас
+    $time_end = strtotime($date_end);   // время окончания выставления лота
+    $time_interval = $time_end - $time_now;
 
-    $hours = floor($time_interval / 3600);
+    $days= floor($time_interval / 86400);
+    $hours = floor(($time_interval % 86400) / 3600);
     $minutes = floor(($time_interval % 3600) / 60);
 
-    return $hours . ":" . $minutes; // вывод оставшегося времени до начала следующего дня (полночь)
+    return $days . ":" . $hours . ":" . $minutes; // вывод времени до окончания выставления лота
 };
 
 /**
@@ -136,13 +140,11 @@ function db_fetch_data ($link, $sql, $data = []) {
  *
  * @return {int} - начение поля AUTO_INCREMENT, которое было затронуто предыдущим запросом
  */
-function db_insert_data ($link, $sql, $data = [], $direction) {
+function db_insert_data ($link, $sql, $data = []) {
     $stmt = db_get_prepare_stmt($link, $sql, $data);
 
     if ($result = mysqli_stmt_execute($stmt)) {
-        $id = mysqli_insert_id($link);
-
-        return header($direction . $id);
+        return mysqli_insert_id($link);
     } else {
         // неуспешное выполнение запроса, показ ошибки
         $error = mysqli_error($link);
@@ -172,17 +174,12 @@ function db_insert_data ($link, $sql, $data = [], $direction) {
  * @return bool
  */
 function check_date_format ($date) {
-    $result = false;
-    $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
+    $regexp = '/(\d{2})\.([0-9][0-9])\.(\d{4})/m';
+
     if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
-        $result = checkdate($parts[2], $parts[1], $parts[3]);
+        return checkdate($parts[2], $parts[1], $parts[3]);
     }
-    return $result;
 }
 check_date_format("04.02.2019"); // true
 check_date_format("15.23.1989"); // false
 check_date_format("1989-15-02"); // false
-
-
-
-
