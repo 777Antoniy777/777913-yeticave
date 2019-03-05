@@ -12,7 +12,7 @@ $categories = db_fetch_data($link, $sql);
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+    $required = ["lot-name", "category", "message", "lot-rate", "lot-step", "lot-date"];
     $dict = [
         "lot-name" => "Наименование",
         "category" => "Категория",
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "good_img" => "Изображение",
         "lot-rate" => "Начальная цена",
         "lot-step" => "Шаг ставки",
-        "lot-date" => "Дата окончания торгов",
+        "lot-date" => "Дата окончания торгов"
     ];
     $errors = [];
 
