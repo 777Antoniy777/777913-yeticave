@@ -4,6 +4,9 @@ $link = mysqli_init();
 mysqli_options($link, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
 $connect = mysqli_real_connect($link, "localhost", "root", "", "yeticave");
 
+// устанавливаем начало сессии
+session_start();
+
 // проверка на подключение к БД и получение массива категорий
 if (!$link) {
     // неуспешное выполнение запроса, показ ошибки

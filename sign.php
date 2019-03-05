@@ -57,30 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors["good_img"] = "Вы не загрузили файл";
     }
 
-    // проверяем меньше 0 или нет вводимая цена
-    if (!empty($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
-        $errors["lot-rate"] = "Число должно быть больше 0!";
-    }
-
-    // проверяем меньше 0 или нет вводимая ставка
-    if (!empty($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
-        $errors["lot-step"] = "Число должно быть больше 0!";
-    }
-
-    // проверяем формат даты календаря
-    if (!empty($_POST["lot-date"])) {
-        if (!check_date_format($_POST["lot-date"])) {
-            $errors["lot-date"] = "Введите дату в формате ДД.ММ.ГГГГ";
-        }
-
-        $time_nextday = strtotime("+1 day");    // следующий день
-        $time_interval = strtotime($_POST["lot-date"]);
-
-        if ($time_interval < $time_nextday) {
-            $errors["lot-date"] = "Минимальное время публикации лота не должно быть меньше, чем 1 день. Установите другую дату";
-        }
-    }
-
     if (count($errors)) {
         $content = include_template('add.php', [
             "categories" => $categories,
@@ -122,3 +98,4 @@ $layout_content = include_template("layout.php", [
 
 // вывод страницы index.php
 print($layout_content);
+

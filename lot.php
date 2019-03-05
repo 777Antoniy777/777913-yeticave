@@ -13,7 +13,7 @@ if (isset($_GET["id"])) {
     $id = $_GET["id"];
 
     // запрос на получение массива товаров
-    $sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url, l.description, l.step FROM categories c
+    $sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url, l.description, l.step, l.date_end FROM categories c
             JOIN lots l ON l.category_id = c.id
             WHERE l.id = ?";
 
