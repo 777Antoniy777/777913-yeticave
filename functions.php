@@ -103,8 +103,6 @@ function db_get_prepare_stmt ($link, $sql, $data = []) {
  * @return {array} - двумерный массив с нужными данными
  */
 function db_fetch_data ($link, $sql, $data = []) {
-    $result = [];
-
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
 

@@ -23,10 +23,10 @@
 
         <nav class="user-menu">
         <!-- здесь должен быть PHP код для показа имени пользователя -->
-        <?php if ($is_auth): ?>
+        <?php if (isset($_SESSION["user"])): ?>
 
             <div class="user-menu__logged">
-                <p><?= $user_name; ?></p>
+                <p><?= $username = $_SESSION["user"]["name"]; ?></p>
             </div>
 
         <?php else: ?>
@@ -36,7 +36,7 @@
                     <a href="sign.php">Регистрация</a>
                 </li>
                 <li class="user-menu__item">
-                    <a href="#">Вход</a>
+                    <a href="login.php">Вход</a>
                 </li>
             </ul>
 

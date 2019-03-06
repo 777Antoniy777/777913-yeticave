@@ -30,7 +30,7 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name CHAR(150) NOT NULL,
   email CHAR(100) NOT NULL UNIQUE,
-  password CHAR(50) NOT NULL,
+  password CHAR(90) NOT NULL,
   avatar CHAR(255),
   date_registry TIMESTAMP DEFAULT NOW(),
   contacts CHAR(255)

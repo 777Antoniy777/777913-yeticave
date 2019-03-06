@@ -77,9 +77,7 @@ $content = include_template("index.php", [
 $layout_content = include_template("layout.php", [
     "content" => $content,
     "page_name" => "YetiCave",
-    "categories" => $categories,
-    "is_auth" => $is_auth,
-    "user_name" => $user_name
+    "categories" => $categories
 ]);
 
 // вывод страницы index.php

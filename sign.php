@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    // проверяем валиден ли email
+    // проверяем валиден ли email и есть ли похожий в БД
     if (!empty($_POST["email"])) {
 
         if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_POST["avatar"]
         ]);
 
-        header("Location: index.php");
+        header("Location: login.php");
     } else {
         $sql = "INSERT INTO users (name, email, password, contacts)
                 VALUES (?, ?, ?, ?)";
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_POST["message"]
         ]);
 
-        header("Location: index.php");
+        header("Location: login.php");
     }
 
 } else {
