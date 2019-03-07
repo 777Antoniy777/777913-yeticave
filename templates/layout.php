@@ -27,6 +27,7 @@
 
             <div class="user-menu__logged">
                 <p><?= $username = $_SESSION["user"]["name"]; ?></p>
+                <p class="user-menu__item"><a href="logout.php">Выход</a></p>
             </div>
 
         <?php else: ?>
