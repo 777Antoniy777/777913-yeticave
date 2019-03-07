@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    // проверяем пароль по хэшу, который ранее был внесен при регистрации
     $email = mysqli_real_escape_string($link, $_POST["email"]);
     $sql = "SELECT * FROM users WHERE email = '$email'";  //вопрос про поля из БД (в ТЗ сказано, что нужен только id)
     $res = mysqli_query($link, $sql);

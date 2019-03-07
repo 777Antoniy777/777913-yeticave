@@ -181,3 +181,18 @@ function check_date_format ($date) {
 check_date_format("04.02.2019"); // true
 check_date_format("15.23.1989"); // false
 check_date_format("1989-15-02"); // false
+
+/**
+ * Проверяет, что переданная цена и ставка являются целыми числами
+ *
+ * @param string $data - данные из массива $_POST
+ *
+ * @return bool
+ */
+function check_price_format ($data) {
+    $regexp = '/[0-9]+[.,]/m';
+
+    if (preg_match($regexp, $data)) {
+        return true;
+    }
+}

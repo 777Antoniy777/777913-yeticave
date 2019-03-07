@@ -57,14 +57,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors["good_img"] = "Вы не загрузили файл";
     }
 
-    // проверяем меньше 0 или нет вводимая цена
-    if (!empty($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
-        $errors["lot-rate"] = "Число должно быть больше 0!";
+    // проверяем меньше 0 или нет вводимая цена и является ли число целым
+    if (!empty($_POST["lot-rate"])) {
+
+        if ($_POST["lot-rate"] <= 0) {
+            $errors["lot-rate"] = "Число должно быть больше 0!";
+        }
+
+        if (check_price_format($_POST["lot-rate"])) {
+            $errors["lot-rate"] = "Число должно быть целым";
+        }
     }
 
-    // проверяем меньше 0 или нет вводимая ставка
-    if (!empty($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
-        $errors["lot-step"] = "Число должно быть больше 0!";
+    // проверяем меньше 0 или нет вводимая ставка и является ли число целым
+    if (!empty($_POST["lot-step"])) {
+
+        if ($_POST["lot-step"] <= 0) {
+            $errors["lot-step"] = "Число должно быть больше 0!";
+        }
+
+        if (check_price_format($_POST["lot-step"])) {
+            $errors["lot-step"] = "Число должно быть целым";
+        }
     }
 
     // проверяем формат даты календаря
