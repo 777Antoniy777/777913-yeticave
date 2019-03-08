@@ -1,6 +1,7 @@
 <?php
-// $is_auth = rand(0, 1);
-$user_name = "Антон"; // укажите здесь ваше имя
+// проверка идет ли сейчас сессия или нет и подстановка имени зарегистрированного пользователя
+$is_session = isset($_SESSION["user"]);
+$username = $_SESSION["user"]["name"];
 
 // Таймзона моего города и местная локаль
 date_default_timezone_set("Asia/Omsk");

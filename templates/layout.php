@@ -23,7 +23,8 @@
 
         <nav class="user-menu">
         <!-- здесь должен быть PHP код для показа имени пользователя -->
-        <?php if (isset($_SESSION["user"])): ?>
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <?php if ($is_session = isset($_SESSION["user"])): ?>
 
             <div class="user-menu__logged">
                 <p><?= $username = $_SESSION["user"]["name"]; ?></p>

@@ -195,4 +195,6 @@ function check_price_format ($data) {
     if (preg_match($regexp, $data)) {
         return true;
     }
+
+    return false;
 }

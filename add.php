@@ -112,6 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_POST["category"],
             $_POST["lot-name"],
             $_POST["message"],
+            // STR_TO_DATE($_POST["lot-date"], "%d.%m.%Y"),
             date_format($date, 'Y-m-d'),
             $_POST["good_img"],
             $_POST["lot-rate"],
@@ -126,11 +127,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ]);
 }
 
-if (isset($_SESSION["user"])) {
+if ($is_session = isset($_SESSION["user"])) {   //!!!!!!!!!!!!!!!!!!!!!!!
     $layout_content = include_template("layout.php", [
         "content" => $content,
         "page_name" => "YetiCave",
-        "categories" => $categories
+        "categories" => $categories,
+        "is_session" => $is_session,
+        "username" => $username
     ]);
 } else {
     $content = include_template("error.php", [

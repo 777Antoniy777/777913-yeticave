@@ -6,7 +6,7 @@ require_once("config.php");
 require_once("init.php");
 
 // удаляем данные сессии, если пользователь вышел из своего аккаунта
-if (isset($_SESSION["user"])) {
+if ($is_session = isset($_SESSION["user"])) { //!!!!!!!!!!!!!!!!!!!!!!
     session_unset($_SESSION["user"]);
     header("Location: index.php");
 }
