@@ -12,7 +12,7 @@ $categories = db_fetch_data($link, $sql);
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+    $required = ["lot-name", "category", "message", "lot-rate", "lot-step", "lot-date"];
     $dict = [
         "lot-name" => "Наименование",
         "category" => "Категория",
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "good_img" => "Изображение",
         "lot-rate" => "Начальная цена",
         "lot-step" => "Шаг ставки",
-        "lot-date" => "Дата окончания торгов",
+        "lot-date" => "Дата окончания торгов"
     ];
     $errors = [];
 
@@ -57,14 +57,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors["good_img"] = "Вы не загрузили файл";
     }
 
-    // проверяем меньше 0 или нет вводимая цена
-    if (!empty($_POST["lot-rate"]) && $_POST["lot-rate"] <= 0) {
-        $errors["lot-rate"] = "Число должно быть больше 0!";
+    // проверяем меньше 0 или нет вводимая цена и является ли число целым
+    if (!empty($_POST["lot-rate"])) {
+
+        if ($_POST["lot-rate"] <= 0) {
+            $errors["lot-rate"] = "Число должно быть больше 0!";
+        }
+
+        if (check_price_format($_POST["lot-rate"])) {
+            $errors["lot-rate"] = "Число должно быть целым";
+        }
     }
 
-    // проверяем меньше 0 или нет вводимая ставка
-    if (!empty($_POST["lot-step"]) && $_POST["lot-step"] <= 0) {
-        $errors["lot-step"] = "Число должно быть больше 0!";
+    // проверяем меньше 0 или нет вводимая ставка и является ли число целым
+    if (!empty($_POST["lot-step"])) {
+
+        if ($_POST["lot-step"] <= 0) {
+            $errors["lot-step"] = "Число должно быть больше 0!";
+        }
+
+        if (check_price_format($_POST["lot-step"])) {
+            $errors["lot-step"] = "Число должно быть целым";
+        }
     }
 
     // проверяем формат даты календаря
@@ -112,13 +126,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ]);
 }
 
-$layout_content = include_template("layout.php", [
-    "content" => $content,
-    "page_name" => "YetiCave",
-    "categories" => $categories,
-    "is_auth" => $is_auth,
-    "user_name" => $user_name
-]);
+if (isset($_SESSION["user"])) {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories
+    ]);
+} else {
+    $content = include_template("error.php", [
+        "error" => $error
+    ]);
+
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories
+    ]);
+}
 
 // вывод страницы index.php
 print($layout_content);

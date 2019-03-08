@@ -11,16 +11,13 @@ $categories = db_fetch_data($link, $sql);
 
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+    $required = ["email", "password", "name", "message"];
     $dict = [
-        "lot-name" => "Наименование",
-        "category" => "Категория",
-        "message" => "Описание",
-        "good_img" => "Изображение",
-        "lot-rate" => "Начальная цена",
-        "lot-step" => "Шаг ставки",
-        "lot-date" => "Дата окончания торгов",
+        "email" => "E-mail",
+        "password" => "Пароль",
+        "name" => "Имя",
+        "message" => "Контактные данные",
+        "avatar" => "Аватар"
     ];
     $errors = [];
 
@@ -30,60 +27,82 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    // проверяем валиден ли email и есть ли похожий в БД
+    if (!empty($_POST["email"])) {
+
+        if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $errors["email"] = "Введите корректный email";
+        }
+
+        $email = mysqli_real_escape_string($link, $_POST["email"]);
+        $sql = "SELECT id FROM users WHERE email = '$email'";
+        $result = mysqli_query($link, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            $errors["email"] = "Пользователь с этим email уже зарегистрирован";
+        }
+    }
+
     // проверяем существует ли файл изображения товара и если есть, то перемещаем его из временной папки
-    if (!empty($_FILES["good_img"]["name"])) {
-        $tmp_name = $_FILES["good_img"]["tmp_name"];
+    if (!empty($_FILES["avatar"]["name"])) {
+        $tmp_name = $_FILES["avatar"]["tmp_name"];
         $filepath = __DIR__ . "/";
 
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);       //открываем соединение file_info
-        $file_type = finfo_file($finfo, $tmp_name);    //получаем тип файла
+        $file_type = mime_content_type($tmp_name);
 
         if ($file_type === "image/png" || $file_type === "image/jpeg") {
 
             if ($file_type === "image/jpeg") {
-                $filename = "img/" . uniqid() . ".jpeg";
+                $filename = "img/" . uniqid() . "jpeg";
             }
 
             if ($file_type === "image/png") {
-                $filename = "img/" . uniqid() . ".png";
+                $filename = "img/" . uniqid() . "png";
             }
 
             move_uploaded_file($tmp_name, $filepath . $filename);
-            $_POST["good_img"] = $filename;
+            $_POST["avatar"] = $filename;
         } else {
-            $errors["good_img"] = "Загрузите картинку в формате JPG или PNG";
+            $errors["avatar"] = "Загрузите картинку в формате JPG или PNG";
         }
-    } else {
-        $errors["good_img"] = "Вы не загрузили файл";
     }
 
     if (count($errors)) {
-        $content = include_template('add.php', [
+        $content = include_template("sign.php", [
             "categories" => $categories,
             "$_POST" => $_POST,
             "errors" => $errors,
             "dict" => $dict
         ]);
-    } else {
-        $sql = "INSERT INTO lots (category_id, title_lot, description, date_end, url, start_price, step, user_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+    } else if ($_POST["avatar"]) {
+        $sql = "INSERT INTO users (name, email, password, contacts, avatar)
+                VALUES (?, ?, ?, ?, ?)";
 
-        $date = date_create($_POST["lot-date"]);
-
-        $id = db_insert_data($link, $sql, [
-            $_POST["category"],
-            $_POST["lot-name"],
+        db_insert_data($link, $sql, [
+            $_POST["name"],
+            $_POST["email"],
+            password_hash($_POST["password"], PASSWORD_DEFAULT),
             $_POST["message"],
-            date_format($date, 'Y-m-d'),
-            $_POST["good_img"],
-            $_POST["lot-rate"],
-            $_POST["lot-step"]
+            $_POST["avatar"]
         ]);
 
-        header("Location: lot.php?id=" . $id);
+        header("Location: login.php");
+    } else {
+        $sql = "INSERT INTO users (name, email, password, contacts)
+                VALUES (?, ?, ?, ?)";
+
+        db_insert_data($link, $sql, [
+            $_POST["name"],
+            $_POST["email"],
+            password_hash($_POST["password"], PASSWORD_DEFAULT),
+            $_POST["message"]
+        ]);
+
+        header("Location: login.php");
     }
+
 } else {
-    $content = include_template('add.php', [
+    $content = include_template("sign.php", [
         "categories" => $categories
     ]);
 }

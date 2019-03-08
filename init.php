@@ -4,7 +4,7 @@ $link = mysqli_init();
 mysqli_options($link, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
 $connect = mysqli_real_connect($link, "localhost", "root", "", "yeticave");
 
-// устанавливаем начало сессии
+// открываем начало сессии
 session_start();
 
 // проверка на подключение к БД и получение массива категорий
@@ -18,9 +18,7 @@ if (!$link) {
     $layout_content = include_template("layout.php", [
         "content" => $content,
         "page_name" => "YetiCave",
-        "categories" => $categories,
-        "is_auth" => $is_auth,
-        "user_name" => $user_name
+        "categories" => $categories
     ]);
 
     // вывод страницы index.php при отсутствии данных
