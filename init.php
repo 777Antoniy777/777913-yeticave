@@ -19,7 +19,7 @@ if (!$link) {
         "content" => $content,
         "page_name" => "YetiCave",
         "categories" => $categories,
-        "is_session" => $is_session,
+        "is_auth" => $is_auth,
         "username" => $username
     ]);
 

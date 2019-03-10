@@ -1,9 +1,11 @@
 <?php
 require_once("functions.php");
-require_once("config.php");
 
-// работа с MySQL из php
+// работа с MySQL из php и открытие сессии
 require_once("init.php");
+
+// авторизация пользователей и установка timezone
+require_once("config.php");
 
 // запрос на получение массива категорий
 $sql = "SELECT title_category, alias FROM categories";
@@ -42,7 +44,7 @@ if (!$search) {
             "content" => $content,
             "page_name" => "YetiCave",
             "categories" => $categories,
-            "is_session" => $is_session,
+            "is_auth" => $is_auth,
             "username" => $username
         ]);
 
@@ -59,7 +61,7 @@ if (!$search) {
             "content" => $content,
             "page_name" => "YetiCave",
             "categories" => $categories,
-            "is_session" => $is_session,
+            "is_auth" => $is_auth,
             "username" => $username
         ]);
 
@@ -78,7 +80,7 @@ $layout_content = include_template("layout.php", [
     "content" => $content,
     "page_name" => "YetiCave",
     "categories" => $categories,
-    "is_session" => $is_session,
+    "is_auth" => $is_auth,
     "username" => $username
 ]);
 

@@ -23,11 +23,10 @@
 
         <nav class="user-menu">
         <!-- здесь должен быть PHP код для показа имени пользователя -->
-        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-        <?php if ($is_session = isset($_SESSION["user"])): ?>
+        <?php if ($is_auth): ?>
 
             <div class="user-menu__logged">
-                <p><?= $username = $_SESSION["user"]["name"]; ?></p>
+                <p><?= $username; ?></p>
                 <p class="user-menu__item"><a href="logout.php">Выход</a></p>
             </div>
 

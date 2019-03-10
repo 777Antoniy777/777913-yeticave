@@ -41,12 +41,24 @@
                             Мин. ставка <span><?= $good["step"]; ?></span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
-                        <p class="lot-item__form-item form__item form__item--invalid">
+                    <form class="lot-item__form" action="lot.php" method="post">
+                        <p class="lot-item__form-item form__item <?= isset($errors["cost"]) ? "form__item--invalid" : ""; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="12 000">
+                            <input id="cost" type="text" name="cost" value="<?= $_POST["cost"] ?? ""; ?>" placeholder="12 000">
                             <span class="form__error">Введите наименование лота</span>
                         </p>
+
+                        <?php if (isset($errors)): ?>
+
+                            <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+                            <ul>
+                                <?php foreach($errors as $error => $value): ?>
+                                <li><strong><?= $dict[$error]; ?>: </strong><?= $value; ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+
+                        <?php endif; ?>
+
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
