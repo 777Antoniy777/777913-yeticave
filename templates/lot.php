@@ -68,12 +68,13 @@
 
             <div class="history">
 
+                    <h3>История ставок (<span><?= count($bets); ?></span>)</h3>
+                    <table class="history__list">
+
                 <?php foreach ($bets as $id => $bet): ?>
 
-                    <h3>История ставок (<span>10</span>)</h3>
-                    <table class="history__list">
                     <tr class="history__item">
-                        <td class="history__name"><?= $users[$id][$bet]["name"]; ?></td>
+                        <td class="history__name"><?= $bet["name"]; ?></td>
                         <td class="history__price"><?= $bet["price"]; ?></td>
                         <td class="history__time">в <?= $bet["date_start"]; ?></td>
                     </tr>

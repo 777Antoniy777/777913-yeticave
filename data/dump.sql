@@ -129,5 +129,5 @@ VALUES
 -- наполнение таблицы Ставки
 INSERT INTO bets (price, user_id, lot_id)
 VALUES
-(5000, 1, 1),
-(4000, 2, 2);
+(5000, 1, 2),
+(4000, 2, 1);
