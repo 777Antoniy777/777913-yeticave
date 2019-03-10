@@ -42,7 +42,7 @@ CREATE TABLE bets (
   lot_id INT,
   user_id INT,
   date_start TIMESTAMP DEFAULT NOW(),
-  price SMALLINT NOT NULL
+  price INT NOT NULL
 );
 
 -- наполнение таблицы Категории

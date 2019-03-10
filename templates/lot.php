@@ -26,7 +26,7 @@
             </div>
             <div class="lot-item__right">
 
-            <?php if (isset($_SESSION["user"]) && strtotime("now") < strtotime($goods[$id]["date_end"]) && $_SESSION["user"]["id"] !== $goods[$id]["user_id"]): ?>
+            <?php if ($is_auth || strtotime("now") < strtotime($goods[$id]["date_end"]) || $_SESSION["user"]["id"] !== $goods[$id]["user_id"] || !isset($_POST)): ?>
 
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
@@ -35,17 +35,23 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?= format_price(htmlspecialchars($good["start_price"])); ?></span>
+
+                            <span class="lot-item__cost">
+                                <?= format_price(htmlspecialchars($total_price)); ?>
+                            </span>
+
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span><?= $good["step"]; ?></span>
+
+                            Мин. ставка <span><?= $min_step; ?></span>
+
                         </div>
                     </div>
-                    <form class="lot-item__form" action="lot.php" method="post">
+                    <form class="lot-item__form" action="" method="post">
                         <p class="lot-item__form-item form__item <?= isset($errors["cost"]) ? "form__item--invalid" : ""; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" value="<?= htmlspecialchars($_POST["cost"]) ?? ""; ?>" placeholder="12 000">
-                            <span class="form__error">Введите наименование лота</span>
+                            <input id="cost" type="text" name="cost" value="<?= !empty($_POST["cost"]) ? htmlspecialchars($_POST["cost"]) : ""; ?>" placeholder="<?= $min_step ?>">
+                            <span class="form__error">Введите правильное значение ставки</span>
                         </p>
 
                         <?php if (isset($errors)): ?>
@@ -74,9 +80,9 @@
                 <?php foreach ($bets as $id => $bet): ?>
 
                     <tr class="history__item">
-                        <td class="history__name"><?= $bet["name"]; ?></td>
-                        <td class="history__price"><?= $bet["price"]; ?></td>
-                        <td class="history__time"><?= date("d.m.Y в H:m:s", strtotime($bet["date_start"])); ?></td>
+                        <td class="history__name"><?= htmlspecialchars($bet["name"]); ?></td>
+                        <td class="history__price"><?= htmlspecialchars($bet["price"]); ?></td>
+                        <td class="history__time"><?= htmlspecialchars(date("d.m.Y в H:m:s", strtotime($bet["date_start"]))); ?></td>
                     </tr>
 
                 <?php endforeach; ?>
