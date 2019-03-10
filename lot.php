@@ -50,6 +50,12 @@ if (isset($_GET["id"])) {
             if (check_price_format($_POST["cost"])) {
                 $errors["cost"] = "Число должно быть целым";
             }
+
+            $total_price = $goods[0]["start_price"] + $goods[0]["step"];
+
+            if ($_POST["cost"] < $total_price) {
+                $errors["cost"] = "Сумма ставки должна быть больше, чем" . $total_price;
+            }
         }
 
         if (count($errors)) {
@@ -62,11 +68,13 @@ if (isset($_GET["id"])) {
         } else {
             $sql = "INSERT INTO bets (price, user_id, lot_id) VALUES (?, ?, ?)";
 
-            $id = db_insert_data($link, $sql, [
+            $lot_id = db_insert_data($link, $sql, [
                 $_POST["cost"],
                 $_SESSION["user"]["id"],
                 $id
             ]);
+
+            header("Location: lot.php?id=" . $id);
         }
     } else {
         $content = include_template('lot.php', [
