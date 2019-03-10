@@ -26,7 +26,7 @@
             </div>
             <div class="lot-item__right">
 
-            <?php if (isset($_SESSION["user"])): ?>
+            <?php if (isset($_SESSION["user"]) && strtotime("now") < strtotime($goods[$id]["date_end"]) && $_SESSION["user"]["id"] !== $goods[$id]["user_id"]): ?>
 
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
@@ -44,7 +44,7 @@
                     <form class="lot-item__form" action="lot.php" method="post">
                         <p class="lot-item__form-item form__item <?= isset($errors["cost"]) ? "form__item--invalid" : ""; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" value="<?= $_POST["cost"] ?? ""; ?>" placeholder="12 000">
+                            <input id="cost" type="text" name="cost" value="<?= htmlspecialchars($_POST["cost"]) ?? ""; ?>" placeholder="12 000">
                             <span class="form__error">Введите наименование лота</span>
                         </p>
 
@@ -76,7 +76,7 @@
                     <tr class="history__item">
                         <td class="history__name"><?= $bet["name"]; ?></td>
                         <td class="history__price"><?= $bet["price"]; ?></td>
-                        <td class="history__time">в <?= $bet["date_start"]; ?></td>
+                        <td class="history__time"><?= date("d.m.Y в H:m:s", strtotime($bet["date_start"])); ?></td>
                     </tr>
 
                 <?php endforeach; ?>

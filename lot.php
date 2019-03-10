@@ -13,23 +13,25 @@ $categories = db_fetch_data($link, $sql);
 
 // запрос на получение массива ставок
 $sql = "SELECT b.price, b.date_start, b.id, u.name FROM bets b
-        JOIN users u ON b.user_id = u.id";
+        JOIN users u ON b.user_id = u.id
+        ORDER BY b.date_start DESC";
 $bets = db_fetch_data($link, $sql);
 
 if (isset($_GET["id"])) {
-    $id = $_GET["id"];
+    $lot_id = $_GET["id"];
 
     // запрос на получение массива товаров
     $sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url, l.description, l.step, l.date_end FROM categories c
             JOIN lots l ON l.category_id = c.id
             WHERE l.id = ?";
 
-    $goods = db_fetch_data($link, $sql, [$id]);
+    $goods = db_fetch_data($link, $sql, [$lot_id]);
 
     $content = include_template("lot.php", [
         "goods" => $goods,
         "categories" => $categories,
-        "bets" => $bets
+        "bets" => $bets,
+        "lot_id" => $lot_id
     ]);
 }
 
@@ -76,19 +78,20 @@ if ($is_auth && $_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $sql = "INSERT INTO bets (price, user_id, lot_id) VALUES (?, ?, ?)";
 
-        $lot_id = db_insert_data($link, $sql, [
+        $bet_id = db_insert_data($link, $sql, [
             $_POST["cost"],
             $_SESSION["user"]["id"],
-            $id
+            $lot_id
         ]);
 
-        header("Location: lot.php?id=" . $id);
+        header("Location: lot.php?id=" . $lot_id);
     }
 } else {
     $content = include_template('lot.php', [
         "goods" => $goods,
         "categories" => $categories,
-        "bets" => $bets
+        "bets" => $bets,
+        "lot_id" => $lot_id
     ]);
 }
 
