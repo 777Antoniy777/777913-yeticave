@@ -16,25 +16,25 @@
 
         <div class="form__item <?= isset($errors["email"]) ? "form__item--invalid" : ""; ?>"> <!-- form__item--invalid -->
             <label for="email">E-mail*</label>
-            <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $_POST["email"] ?? ""; ?>" required>
+            <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= !empty($_POST["email"]) ? htmlspecialchars($_POST["email"]) : ""; ?>" required>
             <span class="form__error">Введите e-mail</span>
         </div>
 
         <div class="form__item <?= isset($errors["password"]) ? "form__item--invalid" : ""; ?>">
             <label for="password">Пароль*</label>
-            <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= $_POST["password"] ?? ""; ?>" required>
+            <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= !empty($_POST["password"]) ? htmlspecialchars($_POST["password"]) : ""; ?>" required>
             <span class="form__error">Введите пароль</span>
         </div>
 
         <div class="form__item <?= isset($errors["name"]) ? "form__item--invalid" : ""; ?>">
             <label for="name">Имя*</label>
-            <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= $_POST["name"] ?? ""; ?>" required>
+            <input id="name" type="text" name="name" placeholder="Введите имя" value="<?= !empty($_POST["name"]) ? htmlspecialchars($_POST["name"]) : ""; ?>" required>
             <span class="form__error">Введите имя</span>
         </div>
 
         <div class="form__item <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">
             <label for="message">Контактные данные*</label>
-            <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required><?= $_POST["message"] ?? ""; ?></textarea>
+            <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required><?= !empty($_POST["message"]) ? htmlspecialchars($_POST["message"]) : ""; ?></textarea>
             <span class="form__error">Напишите как с вами связаться</span>
         </div>
 

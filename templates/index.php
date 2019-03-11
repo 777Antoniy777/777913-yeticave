@@ -23,10 +23,10 @@
 
                 <li class="lots__item lot">
                     <div class="lot__image">
-                        <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= $good["title_lot"]; ?>">
+                        <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= htmlspecialchars($good["title_lot"]); ?>">
                     </div>
                     <div class="lot__info">
-                        <span class="lot__category"><?= $good["title_category"]; ?></span>
+                        <span class="lot__category"><?= htmlspecialchars($good["title_category"]); ?></span>
                         <!--htmlspecialchars() - защита от XSS атак-->
                         <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?= $id + 1; ?>"><?= htmlspecialchars($good["title_lot"]); ?></a></h3>
                         <div class="lot__state">
@@ -37,7 +37,7 @@
                             </div>
                             <div class="lot__timer timer">
                                 <!--вывод времени-->
-                                <?= get_time($good["date_end"]); ?>
+                                <?= htmlspecialchars(get_time($good["date_end"])); ?>
                             </div>
                         </div>
                     </div>

@@ -1,12 +1,15 @@
 <?php
 require_once("functions.php");
-require_once("config.php");
 
-// работа с MySQL из php
+// работа с MySQL из php и открытие сессии
 require_once("init.php");
 
+// авторизация пользователей и установка timezone
+require_once("config.php");
+
 // удаляем данные сессии, если пользователь вышел из своего аккаунта
-if ($is_session = isset($_SESSION["user"])) { //!!!!!!!!!!!!!!!!!!!!!!
-    session_unset($_SESSION["user"]);
+if ($is_auth) {
+    session_unset();
     header("Location: index.php");
+    exit();
 }

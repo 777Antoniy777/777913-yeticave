@@ -42,11 +42,14 @@ function get_time ($date_end) {
     $time_end = strtotime($date_end);   // время окончания выставления лота
     $time_interval = $time_end - $time_now;
 
-    $days= floor($time_interval / 86400);
-    $hours = floor(($time_interval % 86400) / 3600);
+    $hours = floor(($time_interval / 3600));
     $minutes = floor(($time_interval % 3600) / 60);
 
-    return $days . ":" . $hours . ":" . $minutes; // вывод времени до окончания выставления лота
+    if ($time_end < $time_now) {
+        return "00" . ":" . "00"; // вывод времени если срок лота истек
+    } else {
+        return $hours . ":" . $minutes; // вывод времени до окончания выставления лота
+    }
 };
 
 /**
@@ -172,15 +175,15 @@ function db_insert_data ($link, $sql, $data = []) {
  * @return bool
  */
 function check_date_format ($date) {
-    $regexp = '/(\d{2})\.([0-9][0-9])\.(\d{4})/m';
+    $regexp = '/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/';
 
     if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
-        return checkdate($parts[2], $parts[1], $parts[3]);
+        // return checkdate($parts[2], $parts[1], $parts[3]);
+        return true;
     }
+
+    return false;
 }
-check_date_format("04.02.2019"); // true
-check_date_format("15.23.1989"); // false
-check_date_format("1989-15-02"); // false
 
 /**
  * Проверяет, что переданная цена и ставка являются целыми числами
@@ -194,6 +197,22 @@ function check_price_format ($data) {
 
     if (preg_match($regexp, $data)) {
         return true;
+    }
+
+    return false;
+}
+
+/**
+ * Открывает блок со ставками и нет
+ *
+ * @param string $auth - данные из массива $_SESSION
+ *
+ * @return bool
+ */
+function show_bets ($auth) {
+    if ($auth) {
+        return true;
+        // show_bets(strtotime("now") < strtotime($goods[$id]["date_end"]) || $_SESSION["user"]["id"] !== $goods[$id]["user_id"] || !isset($_POST)
     }
 
     return false;
