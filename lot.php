@@ -11,22 +11,14 @@ require_once("config.php");
 $sql = "SELECT title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
-// запрос на получение массива ставок
-// $sql = "SELECT b.price, b.date_start, b.id, u.name FROM bets b
-//         JOIN users u ON b.user_id = u.id
-//         ORDER BY b.date_start DESC
-//         WHERE b.lot_id = ?";
-
-// $bets = db_fetch_data($link, $sql, [$lot_id]);
-
 if (isset($_GET["id"])) {
     $lot_id = $_GET["id"];
 
     // запрос на получение массива ставок
     $sql = "SELECT b.price, b.date_start, b.id, u.name FROM bets b
-    JOIN users u ON b.user_id = u.id
-    WHERE b.lot_id = ?
-    ORDER BY b.date_start DESC";
+            JOIN users u ON b.user_id = u.id
+            WHERE b.lot_id = ?
+            ORDER BY b.date_start DESC";
 
     $bets = db_fetch_data($link, $sql, [$lot_id]);
 
@@ -66,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // запрос на получение массива ставок
     $sql = "SELECT b.price, b.date_start, b.id, u.name FROM bets b
-    JOIN users u ON b.user_id = u.id
-    WHERE b.lot_id = ?
-    ORDER BY b.date_start DESC";
+            JOIN users u ON b.user_id = u.id
+            WHERE b.lot_id = ?
+            ORDER BY b.date_start DESC";
 
     $bets = db_fetch_data($link, $sql, [$_POST["lot_id"]]);
 
@@ -160,6 +152,5 @@ if ($is_auth) {
         "is_auth" => $is_auth
     ]);
 }
-
 
 print($layout_content);

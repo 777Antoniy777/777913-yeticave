@@ -16,13 +16,13 @@
 
         <div class="form__item <?= isset($errors["email"]) ? "form__item--invalid" : ""; ?>"> <!-- form__item--invalid -->
             <label for="email">E-mail*</label>
-            <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= $_POST["email"] ?? ""; ?>">
+            <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?= !empty($_POST["email"]) ? htmlspecialchars($_POST["email"]) : ""; ?>">
             <span class="form__error">Введите e-mail</span>
         </div>
 
         <div class="form__item form__item--last <?= isset($errors["password"]) ? "form__item--invalid" : ""; ?>">
             <label for="password">Пароль*</label>
-            <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= $_POST["password"] ?? ""; ?>">
+            <input id="password" type="text" name="password" placeholder="Введите пароль" value="<?= !empty($_POST["password"]) ? htmlspecialchars($_POST["password"]) : ""; ?>">
             <span class="form__error">Введите пароль</span>
         </div>
 
