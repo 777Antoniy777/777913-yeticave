@@ -29,16 +29,12 @@ if (isset($_GET["id"])) {
 
     $goods = db_fetch_data($link, $sql, [$lot_id]);
 
-    // проверка на правильность цены
-    if (!empty($bets)) {
-        $total_price = $goods[0]["start_price"] + $bets[0]["price"];
-    } else {
-        $total_price = $goods[0]["start_price"];
-    }
+    // отображените цены товара из данных БД
+    $total_price = $goods[0]["start_price"];
 
     // проверка на правильность минимальной ставки
     if (!empty($bets)) {
-        $min_step = $goods[0]["start_price"] + $bets[0]["price"] + $goods[0]["step"];
+        $min_step = $bets[0]["price"] + $goods[0]["step"];
     } else {
         $min_step = $goods[0]["start_price"] + $goods[0]["step"];
     }
@@ -82,22 +78,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errors[$key] = "Заполните это поле";
         }
     }
-    // проверяем меньше 0 или нет вводимая цена и является ли число целым
+
+    // проверяем поле ставки на ошибки
     if (!empty($_POST["cost"])) {
+
+        // проверяем меньше 0 или нет вводимая цена и является ли число целым
         if ($_POST["cost"] <= 0) {
             $errors["cost"] = "Число должно быть больше 0!";
         }
 
+        // проверяем целое число или нет
         if (check_price_format($_POST["cost"])) {
             $errors["cost"] = "Число должно быть целым";
         }
 
-        $total_price = $goods[0]["start_price"] + $goods[0]["step"];
+        // проверяем меньше ли введенное значение минимального значения ставки
+        if (!empty($_POST["cost"]) && $_POST["cost"] >= $min_step) {
+            $total_price = $_POST["cost"];
+        } else {
+            $total_price = $goods[0]["start_price"];
+        }
 
-        if ($_POST["cost"] < $total_price) {
-            $errors["cost"] = "Сумма ставки должна быть больше, чем " . $total_price . "&#x20bd;";
+        if ($_POST["cost"] < $min_step) {
+            $errors["cost"] = "Сумма ставки должна быть меньше, чем " . $min_step . "&#x20bd;";
         }
     }
+
     if (count($errors)) {
 
         $content = include_template('lot.php', [
@@ -113,6 +119,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
     } else {
+        // обновление стартовой цены твоара, если была сделана ставка (обновление на гл.стр и на стр.товара)
+        $sql = "UPDATE lots SET start_price = '$total_price' WHERE id = ?";
+        // var_dump($total_price);
+        $start_price = db_insert_data($link, $sql, [$lot_id]);
+
         $sql = "INSERT INTO bets (price, user_id, lot_id) VALUES (?, ?, ?)";
 
         $bet_id = db_insert_data($link, $sql, [
@@ -122,7 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
         header("Location: lot.php?id=" . $lot_id);
-
     }
 } else {
     $content = include_template('lot.php', [

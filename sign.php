@@ -55,11 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($file_type === "image/png" || $file_type === "image/jpeg") {
 
             if ($file_type === "image/jpeg") {
-                $filename = "img/" . uniqid() . "jpeg";
+                $filename = "img/" . uniqid() . ".jpeg";
             }
 
             if ($file_type === "image/png") {
-                $filename = "img/" . uniqid() . "png";
+                $filename = "img/" . uniqid() . ".png";
             }
 
             move_uploaded_file($tmp_name, $filepath . $filename);

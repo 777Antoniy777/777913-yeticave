@@ -26,9 +26,6 @@
             </div>
             <div class="lot-item__right">
 
-            <?php if (show_bets($is_auth)): ?>
-            <?php if (strtotime("now") < strtotime($goods[$id]["date_end"])): ?>
-
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         <?= get_time($good["date_end"]); ?>
@@ -48,6 +45,10 @@
 
                         </div>
                     </div>
+
+            <?php if (show_bets($is_auth)): ?>
+            <?php if (strtotime("now") < strtotime($goods[$id]["date_end"])): ?>
+
                     <form class="lot-item__form" action="lot.php?id=<?= $lot_id; ?>" method="post">
                         <input type="hidden" name="lot_id" value="<?= $lot_id; ?>">
                         <p class="lot-item__form-item form__item <?= isset($errors["cost"]) ? "form__item--invalid" : ""; ?>">
@@ -65,10 +66,12 @@
 
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
-                </div>
 
             <?php endif; ?>
             <?php endif; ?>
+
+                </div>
+
         <?php endforeach; ?>
 
             <div class="history">
