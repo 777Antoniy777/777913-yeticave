@@ -177,7 +177,7 @@ function db_insert_data ($link, $sql, $data = []) {
 function check_date_format ($date) {
     $regexp = '/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/';
 
-    if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
+    if (preg_match($regexp, $date, $parts) && count($parts) === 4) {
         // return checkdate($parts[2], $parts[1], $parts[3]);
         return true;
     }
@@ -212,7 +212,6 @@ function check_price_format ($data) {
 function show_bets ($auth) {
     if ($auth) {
         return true;
-        // show_bets(strtotime("now") < strtotime($goods[$id]["date_end"]) || $_SESSION["user"]["id"] !== $goods[$id]["user_id"] || !isset($_POST)
     }
 
     return false;

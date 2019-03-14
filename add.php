@@ -103,7 +103,6 @@ if ($is_auth) {
         if (count($errors)) {
             $content = include_template('add.php', [
                 "categories" => $categories,
-                "$_POST" => $_POST,
                 "errors" => $errors,
                 "dict" => $dict
             ]);

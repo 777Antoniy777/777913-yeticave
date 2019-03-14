@@ -105,7 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 } else {
     $content = include_template("sign.php", [
-        "categories" => $categories
+        "categories" => $categories,
+        "errors" => $errors
     ]);
 }
 

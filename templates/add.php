@@ -27,16 +27,17 @@
                 <select id="category" name="category" required>
                     <option value="">Выберите категорию</option>
 
-                    <?php foreach ($categories as $category): ?>
+                    <?php foreach ($categories as $id => $category): ?>
 
-                        <option value="<?= $category["id"]; ?>" <?= ($category["id"] == $_POST["category"]) ? "selected" : "" ?>><?= $category["title_category"]; ?></option>
+                        <option value="<?= $category["id"]; ?>"
+                        <?= (strval($category["id"]) === $_POST["category"]) ? "selected" : "" ?>>
+                        <?= htmlspecialchars($category["title_category"]); ?></option>
 
                     <?php endforeach; ?>
 
                 </select>
                 <span class="form__error">Выберите категорию</span>
             </div>
-
         </div>
 
         <div class="form__item form__item--wide <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">

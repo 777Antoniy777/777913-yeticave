@@ -47,7 +47,7 @@
                     </div>
 
             <?php if (show_bets($is_auth)): ?>
-            <?php if (strtotime("now") < strtotime($goods[$id]["date_end"])): ?>
+            <?php if (strtotime("now") < strtotime($goods[$id]["date_end"]) && !$lot && !$bet): ?>
 
                     <form class="lot-item__form" action="lot.php?id=<?= $lot_id; ?>" method="post">
                         <input type="hidden" name="lot_id" value="<?= $lot_id; ?>">

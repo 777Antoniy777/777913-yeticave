@@ -11,6 +11,10 @@ require_once("config.php");
 $sql = "SELECT title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
+// запрос на проверку актуального id товара
+$sql = "SELECT id FROM lots WHERE id = ?";
+$good = db_fetch_data($link, $sql, [$_GET["id"]]);
+
 if (isset($_GET["id"])) {
     $lot_id = $_GET["id"];
 
@@ -39,14 +43,33 @@ if (isset($_GET["id"])) {
         $min_step = $goods[0]["start_price"] + $goods[0]["step"];
     }
 
-    $content = include_template("lot.php", [
-        "goods" => $goods,
-        "categories" => $categories,
-        "bets" => $bets,
-        "is_auth" => $is_auth,
-        "total_price" => $total_price,
-        "min_step" => $min_step
-    ]);
+    if ($is_auth) {
+        // проверка на отсутствие блока ставок для пользователей, которые зашли в свой собственный лот
+        $sql = "SELECT l.id, l.user_id FROM users u
+                JOIN lots l ON l.user_id = u.id
+                WHERE l.id = ? AND u.id = ?";
+
+        $lot = db_fetch_data($link, $sql, [$lot_id, $_SESSION["user"]["id"]]);
+
+        // проверка на то, что уже была сделана ставка для лота
+        $sql = "SELECT l.id, u.id, b.id FROM users u
+                JOIN bets b ON u.id = b.user_id
+                JOIN lots l ON l.id = b.lot_id
+                WHERE l.id = ? AND u.id = ?";
+
+        $bet = db_fetch_data($link, $sql, [$lot_id, $_SESSION["user"]["id"]]);
+
+        $content = include_template("lot.php", [
+            "goods" => $goods,
+            "categories" => $categories,
+            "bets" => $bets,
+            "is_auth" => $is_auth,
+            "total_price" => $total_price,
+            "min_step" => $min_step,
+            "lot" => $lot,
+            "bet" => $bet
+        ]);
+    }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -93,13 +116,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // проверяем меньше ли введенное значение минимального значения ставки
-        if (!empty($_POST["cost"]) && $_POST["cost"] >= $min_step) {
+        if ($_POST["cost"] >= $min_step) {
             $total_price = $_POST["cost"];
         } else {
             $total_price = $goods[0]["start_price"];
-        }
 
-        if ($_POST["cost"] < $min_step) {
             $errors["cost"] = "Сумма ставки должна быть меньше, чем " . $min_step . "&#x20bd;";
         }
     }
@@ -115,13 +136,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "min_step" => $min_step,
             "errors" => $errors,
             "dict" => $dict,
-            "lot_id" => $_POST["lot_id"]
+            "lot_id" => $_POST["lot_id"],
+            "lot" => $lot,
+            "bet" => $bet
         ]);
 
     } else {
         // обновление стартовой цены твоара, если была сделана ставка (обновление на гл.стр и на стр.товара)
         $sql = "UPDATE lots SET start_price = '$total_price' WHERE id = ?";
-        // var_dump($total_price);
         $start_price = db_insert_data($link, $sql, [$lot_id]);
 
         $sql = "INSERT INTO bets (price, user_id, lot_id) VALUES (?, ?, ?)";
@@ -135,15 +157,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: lot.php?id=" . $lot_id);
     }
 } else {
-    $content = include_template('lot.php', [
-        "goods" => $goods,
-        "categories" => $categories,
-        "bets" => $bets,
-        "lot_id" => $lot_id,
-        "is_auth" => $is_auth,
-        "total_price" => $total_price,
-        "min_step" => $min_step
-    ]);
+    if ($is_auth) {
+        $content = include_template('lot.php', [
+            "goods" => $goods,
+            "categories" => $categories,
+            "bets" => $bets,
+            "lot_id" => $lot_id,
+            "is_auth" => $is_auth,
+            "total_price" => $total_price,
+            "min_step" => $min_step,
+            "lot" => $lot,
+            "bet" => $bet
+        ]);
+    } else {
+        $content = include_template('lot.php', [
+            "goods" => $goods,
+            "categories" => $categories,
+            "bets" => $bets,
+            "lot_id" => $lot_id,
+            "is_auth" => $is_auth,
+            "total_price" => $total_price,
+            "min_step" => $min_step
+        ]);
+    }
 }
 
 if ($is_auth) {
