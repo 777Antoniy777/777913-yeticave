@@ -6,8 +6,8 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
+                <li class="promo__item promo__item--<?= htmlspecialchars($category["alias"]); ?>">
+                    <a class="promo__link" href="index.php?category=<?= htmlspecialchars($category["alias"]); ?>"><?= htmlspecialchars($category["title_category"]); ?></a>
                 </li>
 
             <?php endforeach; ?>
@@ -23,12 +23,12 @@
 
                 <li class="lots__item lot">
                     <div class="lot__image">
-                        <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= htmlspecialchars($good["title_lot"]); ?>">
+                        <img src="<?= htmlspecialchars($good["url"]); ?>" width="350" height="260" alt="<?= htmlspecialchars($good["title_lot"]); ?>">
                     </div>
                     <div class="lot__info">
                         <span class="lot__category"><?= htmlspecialchars($good["title_category"]); ?></span>
                         <!--htmlspecialchars() - защита от XSS атак-->
-                        <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?= $id + 1; ?>"><?= htmlspecialchars($good["title_lot"]); ?></a></h3>
+                        <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?= htmlspecialchars($id + 1); ?>"><?= htmlspecialchars($good["title_lot"]); ?></a></h3>
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">1</span>

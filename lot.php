@@ -15,7 +15,7 @@ $categories = db_fetch_data($link, $sql);
 $sql = "SELECT id FROM lots WHERE id = ?";
 $good = db_fetch_data($link, $sql, [$_GET["id"]]);
 
-if (isset($_GET["id"])) {
+if (isset($_GET["id"]) && $good) {
     $lot_id = $_GET["id"];
 
     // запрос на получение массива ставок
@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: lot.php?id=" . $lot_id);
     }
 } else {
-    if ($is_auth) {
+    if ($is_auth && $good) {
         $content = include_template('lot.php', [
             "goods" => $goods,
             "categories" => $categories,
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "lot" => $lot,
             "bet" => $bet
         ]);
-    } else {
+    } else if (!$is_auth && $good) {
         $content = include_template('lot.php', [
             "goods" => $goods,
             "categories" => $categories,
@@ -179,6 +179,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "total_price" => $total_price,
             "min_step" => $min_step
         ]);
+    } else {
+        $content = include_template("error.php", []);
     }
 }
 

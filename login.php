@@ -28,12 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // проверяем пароль по хэшу, который ранее был внесен при регистрации
     $email = mysqli_real_escape_string($link, $_POST["email"]);
-    $sql = "SELECT * FROM users WHERE email = '$email'";  //вопрос про поля из БД (в ТЗ сказано, что нужен только id)
+    $sql = "SELECT * FROM users WHERE email = '$email'";
     $res = mysqli_query($link, $sql);
 
     $user = $res ? mysqli_fetch_assoc($res) : null;
 
-    if (!empty($_POST["password"]) && $user) {     //вопрос про $user
+    if (!empty($_POST["password"]) && $user) {
 
         if (password_verify($_POST["password"], $user["password"])) {
             $_SESSION["user"] = $user;

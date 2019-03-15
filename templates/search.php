@@ -4,8 +4,8 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
+                <li class="promo__item promo__item--<?= htmlspecialchars($category["alias"]); ?>">
+                    <a class="promo__link" href="index.php?category=<?= htmlspecialchars($category["alias"]); ?>"><?= htmlspecialchars($category["title_category"]); ?></a>
                 </li>
 
             <?php endforeach; ?>
@@ -13,19 +13,19 @@
         </nav>
         <div class="container">
         <section class="lots">
-            <h2>Результаты поиска по запросу «<span><?= $search; ?></span>»</h2>
+            <h2>Результаты поиска по запросу «<span><?= htmlspecialchars($search); ?></span>»</h2>
             <ul class="lots__list">
                 <!--заполните этот список из массива с товарами-->
                 <?php foreach ($goods as $id => $good): ?>
 
                     <li class="lots__item lot">
                         <div class="lot__image">
-                            <img src="<?= $good["url"]; ?>" width="350" height="260" alt="<?= $good["title_lot"]; ?>">
+                            <img src="<?= htmlspecialchars($good["url"]); ?>" width="350" height="260" alt="<?= htmlspecialchars($good["title_lot"]); ?>">
                         </div>
                         <div class="lot__info">
-                            <span class="lot__category"><?= $good["title_category"]; ?></span>
+                            <span class="lot__category"><?= htmlspecialchars($good["title_category"]); ?></span>
                             <!--htmlspecialchars() - защита от XSS атак-->
-                            <h3 class="lot__title"><a class="text-link" href="lot.php?good=<?= $id; ?>"><?= htmlspecialchars($good["title_lot"]); ?></a></h3>
+                            <h3 class="lot__title"><a class="text-link" href="lot.php?good=<?= htmlspecialchars($id); ?>"><?= htmlspecialchars($good["title_lot"]); ?></a></h3>
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">1</span>
@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="lot__timer timer timer--finishing">
                                     <!--вывод времени-->
-                                    <?= get_time(); ?>
+                                    <?= htmlspecialchars(get_time()); ?>
                                 </div>
                             </div>
                         </div>

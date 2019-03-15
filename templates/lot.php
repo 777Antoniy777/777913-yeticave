@@ -4,8 +4,8 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
+                <li class="promo__item promo__item--<?= htmlspecialchars($category["alias"]); ?>">
+                    <a class="promo__link" href="index.php?category=<?= htmlspecialchars($category["alias"]); ?>"><?= htmlspecialchars($category["title_category"]); ?></a>
                 </li>
 
             <?php endforeach; ?>
@@ -15,20 +15,20 @@
         <!--заполните этот список из массива с товарами-->
         <?php foreach ($goods as $id => $good): ?>
 
-            <h2><?= $good["title_lot"]; ?></h2>
+            <h2><?= htmlspecialchars($good["title_lot"]); ?></h2>
             <div class="lot-item__content">
             <div class="lot-item__left">
                 <div class="lot-item__image">
-                    <img src="<?= $good["url"]; ?>" width="730" height="548" alt="<?= $good["title_lot"]; ?>">
+                    <img src="<?= htmlspecialchars($good["url"]); ?>" width="730" height="548" alt="<?= htmlspecialchars($good["title_lot"]); ?>">
                 </div>
-                <p class="lot-item__category">Категория: <span><?= $good["title_category"]; ?></span></p>
-                <p class="lot-item__description"><?= $good["description"]; ?></p>
+                <p class="lot-item__category">Категория: <span><?= htmlspecialchars($good["title_category"]); ?></span></p>
+                <p class="lot-item__description"><?= htmlspecialchars($good["description"]); ?></p>
             </div>
             <div class="lot-item__right">
 
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
-                        <?= get_time($good["date_end"]); ?>
+                        <?= htmlspecialchars(get_time($good["date_end"])); ?>
                     </div>
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
@@ -41,19 +41,18 @@
                         </div>
                         <div class="lot-item__min-cost">
 
-                            Мин. ставка <span><?= $min_step; ?></span>
+                            Мин. ставка <span><?= htmlspecialchars($min_step); ?></span>
 
                         </div>
                     </div>
 
-            <?php if (show_bets($is_auth)): ?>
-            <?php if (strtotime("now") < strtotime($goods[$id]["date_end"]) && !$lot && !$bet): ?>
+            <?php if ($is_auth && strtotime("now") < strtotime($goods[$id]["date_end"]) && !$lot && !$bet): ?>
 
-                    <form class="lot-item__form" action="lot.php?id=<?= $lot_id; ?>" method="post">
-                        <input type="hidden" name="lot_id" value="<?= $lot_id; ?>">
+                    <form class="lot-item__form" action="lot.php?id=<?= htmlspecialchars($lot_id); ?>" method="post">
+                        <input type="hidden" name="lot_id" value="<?= htmlspecialchars($lot_id); ?>">
                         <p class="lot-item__form-item form__item <?= isset($errors["cost"]) ? "form__item--invalid" : ""; ?>">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" value="<?= !empty($_POST["cost"]) ? htmlspecialchars($_POST["cost"]) : ""; ?>" placeholder="<?= $min_step ?>">
+                            <input id="cost" type="text" name="cost" value="<?= !empty($_POST["cost"]) ? htmlspecialchars($_POST["cost"]) : ""; ?>" placeholder="<?= htmlspecialchars($min_step) ?>">
 
                             <?php if (isset($errors)): ?>
 
@@ -68,7 +67,6 @@
                     </form>
 
             <?php endif; ?>
-            <?php endif; ?>
 
                 </div>
 
@@ -76,7 +74,7 @@
 
             <div class="history">
 
-                    <h3>История ставок (<span><?= count($bets); ?></span>)</h3>
+                    <h3>История ставок (<span><?= htmlspecialchars(count($bets)); ?></span>)</h3>
                     <table class="history__list">
 
                 <?php foreach ($bets as $id => $bet): ?>

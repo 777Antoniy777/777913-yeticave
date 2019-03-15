@@ -11,9 +11,7 @@ session_start();
 if (!$link) {
     // неуспешное выполнение запроса, показ ошибки
     $error = mysqli_connect_error();
-    $content = include_template("error.php", [
-        "error" => $error
-    ]);
+    $content = include_template("error.php", []);
 
     $layout_content = include_template("layout.php", [
         "content" => $content,
@@ -23,7 +21,7 @@ if (!$link) {
         "username" => $username
     ]);
 
-    // вывод страницы index.php при отсутствии данных
+    // вывод страницы error.php при отсутствии данных
     print($layout_content);
     exit;
 } else {

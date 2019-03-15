@@ -114,9 +114,7 @@ function db_fetch_data ($link, $sql, $data = []) {
     } else {
         // неуспешное выполнение запроса, показ ошибки
         $error = mysqli_error($link);
-        $content = include_template("error.php", [
-            "error" => $error
-        ]);
+        $content = include_template("error.php", []);
 
         $layout_content = include_template("layout.php", [
             "content" => $content,
@@ -149,9 +147,7 @@ function db_insert_data ($link, $sql, $data = []) {
     } else {
         // неуспешное выполнение запроса, показ ошибки
         $error = mysqli_error($link);
-        $content = include_template("error.php", [
-            "error" => $error
-        ]);
+        $content = include_template("error.php", []);
 
         $layout_content = include_template("layout.php", [
             "content" => $content,
