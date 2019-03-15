@@ -30,7 +30,7 @@
                     <?php foreach ($categories as $id => $category): ?>
 
                         <option value="<?= htmlspecialchars($category["id"]); ?>"
-                        <?= (strval($category["id"]) === $_POST["category"]) ? "selected" : "" ?>>
+                        <?= (isset($_POST["category"]) && strval($category["id"]) === $_POST["category"]) ? "selected" : "" ?>>
                         <?= htmlspecialchars($category["title_category"]); ?></option>
 
                     <?php endforeach; ?>

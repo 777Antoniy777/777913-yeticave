@@ -197,18 +197,3 @@ function check_price_format ($data) {
 
     return false;
 }
-
-/**
- * Открывает блок со ставками и нет
- *
- * @param string $auth - данные из массива $_SESSION
- *
- * @return bool
- */
-function show_bets ($auth) {
-    if ($auth) {
-        return true;
-    }
-
-    return false;
-}
