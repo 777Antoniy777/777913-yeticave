@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         } else {
             $total_price = $goods[0]["start_price"];
-            $errors["cost"] = "Сумма ставки должна быть меньше, чем " . $min_step . "&#x20bd;";
+            $errors["cost"] = "Сумма ставки должна быть больше, чем " . $min_step . "&#x20bd;";
         }
     }
     if (count($errors)) {
