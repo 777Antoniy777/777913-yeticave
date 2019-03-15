@@ -115,27 +115,15 @@ function db_get_prepare_stmt ($link, $sql, $data = []) {
 function db_fetch_data ($link, $sql, $data = []) {
 
     $stmt = db_get_prepare_stmt($link, $sql, $data);
-    mysqli_stmt_execute($stmt);
 
-    if ($res = mysqli_stmt_get_result($stmt)) {
-        return mysqli_fetch_all($res, MYSQLI_ASSOC);
+    if ($stmt) {
+        mysqli_stmt_execute($stmt);
+
+        if ($res = mysqli_stmt_get_result($stmt)) {
+            return mysqli_fetch_all($res, MYSQLI_ASSOC);
+        }
     } else {
-
-        // неуспешное выполнение запроса, показ ошибки
-        $error = mysqli_error($link);
-        $content = include_template("error.php", []);
-
-        $layout_content = include_template("layout.php", [
-            "content" => $content,
-            "page_name" => "YetiCave",
-            "categories" => $categories,
-            "is_auth" => $is_auth,
-            "user_name" => $user_name
-        ]);
-
-        // вывод страницы index.php при отсутствии данных
-        print($layout_content);
-        exit;
+        return false;
     }
 }
 
@@ -151,26 +139,16 @@ function db_fetch_data ($link, $sql, $data = []) {
 function db_insert_data ($link, $sql, $data = []) {
 
     $stmt = db_get_prepare_stmt($link, $sql, $data);
+    var_dump($stmt);
 
-    if ($result = mysqli_stmt_execute($stmt)) {
-        return mysqli_insert_id($link);
+    if ($stmt) {
+        mysqli_stmt_execute($stmt);
+
+        if ($result = mysqli_stmt_execute($stmt)) {
+            return mysqli_insert_id($link);
+        }
     } else {
-
-        // неуспешное выполнение запроса, показ ошибки
-        $error = mysqli_error($link);
-        $content = include_template("error.php", []);
-
-        $layout_content = include_template("layout.php", [
-            "content" => $content,
-            "page_name" => "YetiCave",
-            "categories" => $categories,
-            "is_auth" => $is_auth,
-            "user_name" => $user_name
-        ]);
-
-        // вывод страницы index.php при отсутствии данных
-        print($layout_content);
-        exit;
+        return false;
     }
 }
 
@@ -205,6 +183,6 @@ function check_price_format ($data) {
     if (preg_match($regexp, $data)) {
         return true;
     }
-    
+
     return false;
 }

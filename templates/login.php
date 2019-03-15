@@ -26,7 +26,7 @@
             <span class="form__error">Введите пароль</span>
         </div>
 
-        <?php if (count($errors)): ?>
+        <?php if (isset($errors)): ?>
 
             <span class="form__error form__error--bottom" style="display: block">Пожалуйста, исправьте ошибки в форме.</span>
             <ul>

@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
 
     } else {
-        
+
         $sql = "INSERT INTO users (name, email, password, contacts)
                 VALUES (?, ?, ?, ?)";
 
@@ -113,8 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 } else {
     $content = include_template("sign.php", [
-        "categories" => $categories,
-        "errors" => $errors
+        "categories" => $categories
     ]);
 }
 

@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <?php if (count($errors)): ?>
+        <?php if (isset($errors)): ?>
 
             <span class="form__error form__error--bottom" style="display: inline">Пожалуйста, исправьте ошибки в форме.</span>
             <ul>

@@ -68,11 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         header("Location: index.php");
     }
-    
+
 } else {
     $content = include_template("login.php", [
-        "categories" => $categories,
-        "errors" => $errors
+        "categories" => $categories
     ]);
 }
 
