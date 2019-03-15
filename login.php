@@ -1,23 +1,25 @@
 <?php
 require_once("functions.php");
-
 // работа с MySQL из php и открытие сессии
+
 require_once("init.php");
-
 // авторизация пользователей и установка timezone
-require_once("config.php");
 
+require_once("config.php");
 // запрос на получение массива категорий
+
 $sql = "SELECT id, title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $required = ["email", "password"];
     $dict = [
         "email" => "E-mail",
         "password" => "Пароль"
     ];
+
     $errors = [];
 
     foreach ($required as $key) {
@@ -28,19 +30,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // проверяем пароль по хэшу, который ранее был внесен при регистрации
     $email = mysqli_real_escape_string($link, $_POST["email"]);
-    $sql = "SELECT * FROM users WHERE email = '$email'";  //вопрос про поля из БД (в ТЗ сказано, что нужен только id)
-    $res = mysqli_query($link, $sql);
+    $sql = "SELECT * FROM users WHERE email = '$email'";
 
+    $res = mysqli_query($link, $sql);
     $user = $res ? mysqli_fetch_assoc($res) : null;
 
-    if (!empty($_POST["password"]) && $user) {     //вопрос про $user
+    if (!empty($_POST["password"]) && $user) {
 
         if (password_verify($_POST["password"], $user["password"])) {
             $_SESSION["user"] = $user;
         } else {
+
             $errors["password"] = "Неверный пароль";
         }
-
     }
 
     // проверяем валиден ли email и есть ли похожий в БД
@@ -56,19 +58,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if (count($errors)) {
+
         $content = include_template("login.php", [
             "categories" => $categories,
-            // "$_POST" => $_POST,
             "errors" => $errors,
             "dict" => $dict
         ]);
+
     } else {
         header("Location: index.php");
     }
-
+    
 } else {
     $content = include_template("login.php", [
-        "categories" => $categories
+        "categories" => $categories,
+        "errors" => $errors
     ]);
 }
 

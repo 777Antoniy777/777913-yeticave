@@ -26,7 +26,7 @@
         <?php if ($is_auth): ?>
 
             <div class="user-menu__logged">
-                <p><?= $username; ?></p>
+                <p><?= htmlspecialchars($username); ?></p>
                 <p class="user-menu__item"><a href="logout.php">Выход</a></p>
             </div>
 
@@ -58,7 +58,7 @@
             <?php foreach ($categories as $alias => $category): ?>
 
                 <li class="nav__item">
-                    <a href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
+                    <a href="index.php?category=<?= htmlspecialchars($category["alias"]); ?>"><?= htmlspecialchars($category["title_category"]); ?></a>
                 </li>
 
             <?php endforeach; ?>

@@ -4,8 +4,8 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
+                <li class="promo__item promo__item--<?= htmlspecialchars($category["alias"]); ?>">
+                    <a class="promo__link" href="index.php?category=<?= htmlspecialchars($category["alias"]); ?>"><?= htmlspecialchars($category["title_category"]); ?></a>
                 </li>
 
             <?php endforeach; ?>

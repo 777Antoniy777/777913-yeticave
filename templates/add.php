@@ -4,8 +4,8 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
 
-                <li class="promo__item promo__item--<?= $category["alias"]; ?>">
-                    <a class="promo__link" href="index.php?category=<?= $category["alias"]; ?>"><?= $category["title_category"]; ?></a>
+                <li class="promo__item promo__item--<?= htmlspecialchars($category["alias"]); ?>">
+                    <a class="promo__link" href="index.php?category=<?= htmlspecialchars($category["alias"]); ?>"><?= htmlspecialchars($category["title_category"]); ?></a>
                 </li>
 
             <?php endforeach; ?>
@@ -27,16 +27,17 @@
                 <select id="category" name="category" required>
                     <option value="">Выберите категорию</option>
 
-                    <?php foreach ($categories as $category): ?>
+                    <?php foreach ($categories as $id => $category): ?>
 
-                        <option value="<?= $category["id"]; ?>" <?= ($category["id"] == $_POST["category"]) ? "selected" : "" ?>><?= $category["title_category"]; ?></option>
+                        <option value="<?= htmlspecialchars($category["id"]); ?>"
+                        <?= (isset($_POST["category"]) && strval($category["id"]) === $_POST["category"]) ? "selected" : "" ?>>
+                        <?= htmlspecialchars($category["title_category"]); ?></option>
 
                     <?php endforeach; ?>
 
                 </select>
                 <span class="form__error">Выберите категорию</span>
             </div>
-
         </div>
 
         <div class="form__item form__item--wide <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">

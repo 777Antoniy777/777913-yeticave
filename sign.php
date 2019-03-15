@@ -1,18 +1,19 @@
 <?php
 require_once("functions.php");
-
 // работа с MySQL из php и открытие сессии
+
 require_once("init.php");
-
 // авторизация пользователей и установка timezone
-require_once("config.php");
 
+require_once("config.php");
 // запрос на получение массива категорий
+
 $sql = "SELECT id, title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $required = ["email", "password", "name", "message"];
     $dict = [
         "email" => "E-mail",
@@ -21,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "message" => "Контактные данные",
         "avatar" => "Аватар"
     ];
+
     $errors = [];
 
     foreach ($required as $key) {
@@ -38,20 +40,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $email = mysqli_real_escape_string($link, $_POST["email"]);
         $sql = "SELECT id FROM users WHERE email = '$email'";
+
         $result = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($result) > 0) {
             $errors["email"] = "Пользователь с этим email уже зарегистрирован";
         }
     }
-
     // проверяем существует ли файл изображения товара и если есть, то перемещаем его из временной папки
     if (!empty($_FILES["avatar"]["name"])) {
+
         $tmp_name = $_FILES["avatar"]["tmp_name"];
         $filepath = __DIR__ . "/";
 
         $file_type = mime_content_type($tmp_name);
-
         if ($file_type === "image/png" || $file_type === "image/jpeg") {
 
             if ($file_type === "image/jpeg") {
@@ -64,18 +66,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             move_uploaded_file($tmp_name, $filepath . $filename);
             $_POST["avatar"] = $filename;
+
         } else {
             $errors["avatar"] = "Загрузите картинку в формате JPG или PNG";
         }
     }
-
     if (count($errors)) {
+
         $content = include_template("sign.php", [
             "categories" => $categories,
             "errors" => $errors,
             "dict" => $dict
         ]);
+
     } else if (!empty($_POST["avatar"])) {
+
         $sql = "INSERT INTO users (name, email, password, contacts, avatar)
                 VALUES (?, ?, ?, ?, ?)";
 
@@ -89,7 +94,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         header("Location: login.php");
         exit();
+
     } else {
+        
         $sql = "INSERT INTO users (name, email, password, contacts)
                 VALUES (?, ?, ?, ?)";
 
@@ -102,10 +109,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         header("Location: login.php");
         exit();
+
     }
 } else {
     $content = include_template("sign.php", [
-        "categories" => $categories
+        "categories" => $categories,
+        "errors" => $errors
     ]);
 }
 
@@ -128,4 +137,3 @@ if ($is_auth) {
 
 // вывод страницы index.php
 print($layout_content);
-

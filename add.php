@@ -1,18 +1,19 @@
 <?php
 require_once("functions.php");
-
 // работа с MySQL из php и открытие сессии
+
 require_once("init.php");
-
 // авторизация пользователей и установка timezone
-require_once("config.php");
 
+require_once("config.php");
 // запрос на получение массива категорий
+
 $sql = "SELECT id, title_category, alias FROM categories";
 $categories = db_fetch_data($link, $sql);
 
 // обработка данных из формы и показ страницы с новым лотом по данным этой формы
 if ($is_auth) {
+
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $required = ["lot-name", "category", "message", "lot-rate", "lot-step", "lot-date"];
@@ -25,6 +26,7 @@ if ($is_auth) {
             "lot-step" => "Шаг ставки",
             "lot-date" => "Дата окончания торгов"
         ];
+
         $errors = [];
 
         foreach ($required as $key) {
@@ -35,6 +37,7 @@ if ($is_auth) {
 
         // проверяем существует ли файл изображения товара и если есть, то перемещаем его из временной папки
         if (!empty($_FILES["good_img"]["name"])) {
+
             $tmp_name = $_FILES["good_img"]["tmp_name"];
             $filepath = __DIR__ . "/";
 
@@ -53,6 +56,7 @@ if ($is_auth) {
 
                 move_uploaded_file($tmp_name, $filepath . $filename);
                 $_POST["good_img"] = $filename;
+
             } else {
                 $errors["good_img"] = "Загрузите картинку в формате JPG или PNG";
             }
@@ -86,6 +90,7 @@ if ($is_auth) {
 
         // проверяем формат даты календаря
         if (!empty($_POST["lot-date"])) {
+
             $date = date_create($_POST["lot-date"]);
 
             if (!check_date_format($_POST["lot-date"])) {
@@ -101,13 +106,15 @@ if ($is_auth) {
         }
 
         if (count($errors)) {
+
             $content = include_template('add.php', [
                 "categories" => $categories,
-                "$_POST" => $_POST,
                 "errors" => $errors,
                 "dict" => $dict
             ]);
+
         } else {
+
             $sql = "INSERT INTO lots (category_id, title_lot, description, date_end, url, start_price, step, user_id)
                     VALUES (?, ?, ?, STR_TO_DATE(?, '%d.%m.%Y'), ?, ?, ?, ?)";
 
@@ -125,15 +132,18 @@ if ($is_auth) {
             header("Location: lot.php?id=" . $id);
         }
     } else {
+
         $content = include_template('add.php', [
             "categories" => $categories
         ]);
     }
 } else {
+
     $content = include_template("error.php", []);
 }
 
 if ($is_auth) {
+
     $layout_content = include_template("layout.php", [
         "content" => $content,
         "page_name" => "YetiCave",
@@ -141,14 +151,22 @@ if ($is_auth) {
         "is_auth" => $is_auth,
         "username" => $username
     ]);
+
 } else {
+
     $layout_content = include_template("layout.php", [
         "content" => $content,
         "page_name" => "YetiCave",
         "categories" => $categories,
         "is_auth" => $is_auth
     ]);
+
 }
 
 // вывод страницы index.php
 print($layout_content);
+
+// !!!!!!!
+// Уважаемый наставник, пожалуйста высылайте ссылки на скрины с ошибками, большинство того что вы мне написали у меня отсутствует((
+// к сожалению со своим наставником ваши замечания я обговорить не могу, поэтому прошу вас не считать данный комментарий ошибкой, просто по другому я не могу к вам обратиться((
+// !!!!!!!
