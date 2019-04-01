@@ -45,7 +45,11 @@ function get_time ($date_end) {
     $hours = floor(($time_interval / 3600));
     $minutes = floor(($time_interval % 3600) / 60);
 
-    return $hours . ":" . $minutes; // вывод времени до окончания выставления лота
+    if ($time_end < $time_now) {
+        return "00" . ":" . "00"; // вывод времени если срок лота истек
+    } else {
+        return $hours . ":" . $minutes; // вывод времени до окончания выставления лота
+    }
 };
 
 /**
@@ -179,16 +183,7 @@ function check_date_format ($date) {
     }
 
     return false;
-
-    // $newdate = strtotime($date);
-    // $datadate = date('Y-m-d', $newdate);
-
-    // return $datadate;
-
 }
-// check_date_format("04.02.2019"); // true
-// check_date_format("15.23.1989"); // false
-// check_date_format("1989-15-02"); // false
 
 /**
  * Проверяет, что переданная цена и ставка являются целыми числами
@@ -202,6 +197,22 @@ function check_price_format ($data) {
 
     if (preg_match($regexp, $data)) {
         return true;
+    }
+
+    return false;
+}
+
+/**
+ * Открывает блок со ставками и нет
+ *
+ * @param string $auth - данные из массива $_SESSION
+ *
+ * @return bool
+ */
+function show_bets ($auth) {
+    if ($auth) {
+        return true;
+        // show_bets(strtotime("now") < strtotime($goods[$id]["date_end"]) || $_SESSION["user"]["id"] !== $goods[$id]["user_id"] || !isset($_POST)
     }
 
     return false;

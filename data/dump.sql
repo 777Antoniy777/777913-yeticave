@@ -123,8 +123,8 @@ VALUES
 -- наполнение таблицы Пользователи
 INSERT INTO users (name, email, password, avatar, date_registry, contacts)
 VALUES
-("Антон", "tat7106@gmail.com", "Tony777", "img/avatar-1.jpg", "1996-01-07", "+89136826707"),
-("Андрей", "andrey@gmail.com", "GodOverGod", "img/avatar-2.jpg", "1990-10-09", "+88003553535");
+("Антон", "tat7106@gmail.com", "$2y$10$SsvHnNNh7i1l3Ql8ufWJz.X/HYch5yEDAntNOeYhNWVYDsqztSwhm", "img/avatar-1.jpg", "1996-01-07", "+89136826707"),
+("Андрей", "andrey@gmail.com", "$2y$10$vktj7tnQ2LIhtuf4EaS1LOjzcjIu1XtMKnwd.dzX/pTgu1djEGC0a", "img/avatar-2.jpg", "1990-10-09", "+88003553535");
 
 -- наполнение таблицы Ставки
 INSERT INTO bets (price, user_id, lot_id)

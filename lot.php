@@ -62,6 +62,7 @@ if (isset($_GET["id"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $lot_id = $_POST["lot_id"];
 
     // запрос на получение массива ставок
     $sql = "SELECT b.price, b.date_start, b.id, u.name FROM bets b
@@ -71,9 +72,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $bets = db_fetch_data($link, $sql, [$_POST["lot_id"]]);
 
+    // запрос на получение массива товаров
+    $sql = "SELECT l.title_lot, c.title_category, l.start_price, l.url, l.description, l.step, l.date_end FROM categories c
+            JOIN lots l ON l.category_id = c.id
+            WHERE l.id = ?";
+
+    $goods = db_fetch_data($link, $sql, [$lot_id]);
+
     $required = ["cost"];
     $dict = [
-        "cost" => "Текущая цена"
+        "cost" => "Ваша ставка"
     ];
     $errors = [];
 
@@ -95,17 +103,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $total_price = $goods[0]["start_price"] + $goods[0]["step"];
 
         if ($_POST["cost"] < $total_price) {
-            $errors["cost"] = "Сумма ставки должна быть больше, чем" . $total_price;
+            $errors["cost"] = "Сумма ставки должна быть больше, чем " . $total_price . "&#x20bd;";
         }
     }
     if (count($errors)) {
 
         $content = include_template('lot.php', [
             "categories" => $categories,
+            "goods" => $goods,
             "bets" => $bets,
-            "$_POST" => $_POST,
+            "is_auth" => $is_auth,
+            "total_price" => $total_price,
+            "min_step" => $min_step,
             "errors" => $errors,
-            "dict" => $dict
+            "dict" => $dict,
+            "lot_id" => $_POST["lot_id"]
         ]);
 
     } else {
@@ -118,6 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
         header("Location: lot.php?id=" . $lot_id);
+
     }
 } else {
     $content = include_template('lot.php', [
@@ -131,12 +144,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ]);
 }
 
-$layout_content = include_template("layout.php", [
-    "content" => $content,
-    "page_name" => "YetiCave",
-    "categories" => $categories,
-    "is_auth" => $is_auth,
-    "username" => $username
-]);
+if ($is_auth) {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth,
+        "username" => $username
+    ]);
+} else {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth
+    ]);
+}
+
 
 print($layout_content);

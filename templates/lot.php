@@ -26,7 +26,8 @@
             </div>
             <div class="lot-item__right">
 
-            <?php if ($is_auth || strtotime("now") < strtotime($goods[$id]["date_end"]) || $_SESSION["user"]["id"] !== $goods[$id]["user_id"] || !isset($_POST)): ?>
+            <?php if (show_bets($is_auth)): ?>
+            <?php if (strtotime("now") < strtotime($goods[$id]["date_end"])): ?>
 
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
@@ -47,28 +48,26 @@
 
                         </div>
                     </div>
-                    <form class="lot-item__form" action="" method="post">
+                    <form class="lot-item__form" action="lot.php?id=<?= $lot_id; ?>" method="post">
+                        <input type="hidden" name="lot_id" value="<?= $lot_id; ?>">
                         <p class="lot-item__form-item form__item <?= isset($errors["cost"]) ? "form__item--invalid" : ""; ?>">
                             <label for="cost">Ваша ставка</label>
                             <input id="cost" type="text" name="cost" value="<?= !empty($_POST["cost"]) ? htmlspecialchars($_POST["cost"]) : ""; ?>" placeholder="<?= $min_step ?>">
-                            <span class="form__error">Введите правильное значение ставки</span>
-                        </p>
 
-                        <?php if (isset($errors)): ?>
+                            <?php if (isset($errors)): ?>
 
-                            <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
-                            <ul>
                                 <?php foreach($errors as $error => $value): ?>
-                                <li><strong><?= $dict[$error]; ?>: </strong><?= $value; ?></li>
+                                <span class="form__error"><strong><?= $dict[$error]; ?>: </strong><?= $value; ?></span>
                                 <?php endforeach; ?>
-                            </ul>
 
-                        <?php endif; ?>
+                            <?php endif; ?>
+                        </p>
 
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
 
+            <?php endif; ?>
             <?php endif; ?>
         <?php endforeach; ?>
 

@@ -72,11 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (count($errors)) {
         $content = include_template("sign.php", [
             "categories" => $categories,
-            "$_POST" => $_POST,
             "errors" => $errors,
             "dict" => $dict
         ]);
-    } else if ($_POST["avatar"]) {
+    } else if (!empty($_POST["avatar"])) {
         $sql = "INSERT INTO users (name, email, password, contacts, avatar)
                 VALUES (?, ?, ?, ?, ?)";
 
@@ -89,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
         header("Location: login.php");
+        exit();
     } else {
         $sql = "INSERT INTO users (name, email, password, contacts)
                 VALUES (?, ?, ?, ?)";
@@ -101,21 +101,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
         header("Location: login.php");
+        exit();
     }
-
 } else {
     $content = include_template("sign.php", [
         "categories" => $categories
     ]);
 }
 
-$layout_content = include_template("layout.php", [
-    "content" => $content,
-    "page_name" => "YetiCave",
-    "categories" => $categories,
-    "is_auth" => $is_auth,
-    "username" => $username
-]);
+if ($is_auth) {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth,
+        "username" => $username
+    ]);
+} else {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth
+    ]);
+}
 
 // вывод страницы index.php
 print($layout_content);

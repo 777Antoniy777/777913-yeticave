@@ -72,13 +72,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ]);
 }
 
-$layout_content = include_template("layout.php", [
-    "content" => $content,
-    "page_name" => "YetiCave",
-    "categories" => $categories,
-    "is_auth" => $is_auth,
-    "username" => $username
-]);
+if ($is_auth) {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth,
+        "username" => $username
+    ]);
+} else {
+    $layout_content = include_template("layout.php", [
+        "content" => $content,
+        "page_name" => "YetiCave",
+        "categories" => $categories,
+        "is_auth" => $is_auth
+    ]);
+}
 
 // вывод страницы index.php
 print($layout_content);

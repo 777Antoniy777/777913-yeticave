@@ -11,4 +11,5 @@ require_once("config.php");
 if ($is_auth) {
     session_unset();
     header("Location: index.php");
+    exit();
 }
